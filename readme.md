@@ -1,1 +1,1 @@
-# Système centralisé d’enregistrement et de gestion des actes civils (naissances, mariages et décès).
+# Une application web de prise de presence en ligne 
