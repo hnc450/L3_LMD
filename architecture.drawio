@@ -4,21 +4,6 @@
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="4" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.webicons.apache;gradientColor=#DFDEDE" parent="1" vertex="1">
-                    <mxGeometry x="220" y="310" width="250" height="102.4" as="geometry"/>
-                </mxCell>
-                <mxCell id="5" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/databases/Azure_Database_PostgreSQL_Server.svg;" parent="1" vertex="1">
-                    <mxGeometry x="300.12" y="880" width="91.88" height="122.51" as="geometry"/>
-                </mxCell>
-                <mxCell id="6" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Cache_Redis_Product.svg;" parent="1" vertex="1">
-                    <mxGeometry x="20" y="730" width="130" height="109.2" as="geometry"/>
-                </mxCell>
-                <mxCell id="13" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;fontColor=#4277BB;labelBackgroundColor=default;fontSize=12;spacingTop=3;image=img/lib/ibm/applications/app_server.svg;" parent="1" vertex="1">
-                    <mxGeometry x="271" y="570" width="121" height="121" as="geometry"/>
-                </mxCell>
-                <mxCell id="16" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.chrome;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
-                    <mxGeometry x="271" y="60" width="129" height="120" as="geometry"/>
-                </mxCell>
             </root>
         </mxGraphModel>
     </diagram>
