@@ -69,7 +69,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white font-sans">
 
-      {/* ── NAVBAR ── */}
+      {/* ── NAVBAR ──
       <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -98,7 +98,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </nav>
+      </nav> */}
 
       {/* ── HERO ── */}
       <section className="bg-gradient-to-br from-blue-50 to-blue-100 py-20 px-4">
