@@ -16,12 +16,13 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         DB::table('roles')->insert([
-            ['name' => 'user'],
-            ['name' => 'sailer'],
-            ['name' => 'admin'],
+            ['name' => 'user','created_at' => now() , 'updated_at' => now()],
+            ['name' => 'sailer','created_at' => now() , 'updated_at' => now()],
+            ['name' => 'admin','created_at' => now() , 'updated_at' => now()],
         ]);
 
     }

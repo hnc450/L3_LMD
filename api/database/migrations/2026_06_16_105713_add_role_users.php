@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users',function(Blueprint $table){
-          $table
-            ->foreignId('role_id')
-            ->default(1)
-            ->constrained()
-            ->onUpdate('cascade')
-            ->onDelete('set null');
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('role_id')
+                ->nullable() 
+                ->default(1)
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('set null');
         });
+        
     }
 
     /**
