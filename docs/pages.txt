@@ -1,0 +1,91 @@
+📑 Pages principales de la plateforme
+
+    Page d’accueil
+
+        Présentation de la plateforme et son objectif.
+
+        Boutons d’accès rapide : Soumettre une plainte, Se connecter, Créer un compte.
+
+        Informations générales sur les services publics concernés.
+
+    Page d’inscription
+
+        Formulaire pour créer un compte (nom, prénom, email, mot de passe, téléphone).
+
+        Choix du rôle (citoyen par défaut).
+
+    Page de connexion
+
+        Champs email + mot de passe.
+
+        Option “Mot de passe oublié”.
+
+    Page de soumission de plainte
+
+        Formulaire complet : service concerné, titre, description, pièce jointe.
+
+        Champ nom et contact si plainte sans compte.
+
+        Bouton Soumettre.
+
+    Tableau de bord citoyen
+
+        Liste des plaintes déposées par l’utilisateur.
+
+        Statut (Enregistrée, En cours, Résolue).
+
+        Détails de chaque plainte (description, réponses, notifications).
+
+    Page détail d’une plainte
+
+        Informations complètes sur la plainte.
+
+        Réponses des agents.
+
+        Historique des mises à jour.
+
+        Option pour donner un feedback.
+
+    Interface administrateur
+
+        Liste de toutes les plaintes reçues.
+
+        Filtrage par service, statut, date.
+
+        Attribution des plaintes aux agents.
+
+        Mise à jour du statut et ajout de réponses.
+
+    Interface agent
+
+        Liste des plaintes assignées à l’agent.
+
+        Possibilité de répondre et de changer le statut.
+
+        Historique des actions.
+
+    Page notifications
+
+        Liste des notifications reçues par l’utilisateur.
+
+        Statut (envoyée, lue).
+
+    Page feedback
+
+        Formulaire pour noter la qualité de la réponse (1–5).
+
+        Champ commentaire.
+
+    Page statistiques
+
+        Graphiques sur le nombre de plaintes par service.
+
+        Temps moyen de résolution.
+
+        Taux de satisfaction des citoyens.
+
+    Page logs et traçabilité (visible par admin uniquement)
+
+        Historique des actions effectuées par les utilisateurs et agents.
+
+        Détails des modifications sur les plaintes.

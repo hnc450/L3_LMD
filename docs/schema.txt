@@ -1,0 +1,120 @@
+1. Users
+
+    id_user (PK)
+
+    name
+
+    email
+
+    password (hashé)
+
+    phone
+
+    role_id (FK → Roles)
+
+    created_at
+
+
+2. Roles
+
+    id_role (PK)
+
+    name (citoyen, agent, admin)
+
+3. Services publics
+
+    id_service (PK)
+
+    name (ex. Eau, Électricité, Santé)
+
+    description
+
+    image (URL ou chemin fichier)
+
+    responsable_id (FK vers utilisateurs si besoin)
+
+4. Plaintes
+
+    id_plainte (PK)
+
+    id_user (FK → Utilisateurs, peut être NULL si plainte anonyme)
+
+    id_service (FK → Services publics)
+
+    title
+
+    description
+
+    piece_jointe (URL ou chemin fichier)
+
+    statut (Enregistrée, En cours, Résolue, Rejetée)
+
+    created_at
+
+    updated_at
+
+5. Réponses
+
+    id_reponse (PK)
+
+    id_plainte (FK → Plaintes)
+
+    id_agent (FK → Utilisateurs)
+
+    message
+
+    created_at
+
+6. Notifications
+
+    id_notification (PK)
+
+    id_user (FK → Utilisateurs)
+
+    id_plainte (FK → Plaintes)
+
+    type_notification (email, SMS, in-app)
+
+    content
+
+    created_at
+
+    status (sent, read)
+
+7. Feedback
+
+    id_feedback (PK)
+
+    id_plainte (FK → Plaintes)
+
+    id_user (FK → Utilisateurs)
+
+    note (1–5)
+
+    comment
+
+    created_at
+
+8. Logs et traçabilité
+
+    id_log (PK)
+
+    id_user (FK → Utilisateurs)
+
+    action (création plainte, mise à jour statut, suppression, etc.)
+
+    created_at
+
+    details
+
+9. Statistiques
+
+    id_stat (PK)
+
+    id_service (FK → Services publics)
+
+    nombre_plaintes
+
+    temps_moyen_resolution
+
+    taux_satisfaction

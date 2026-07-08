@@ -1,0 +1,37 @@
+Soumission de plainte
+
+    Formulaire simple (nom, contact, service concerné, description du problème).
+
+    Possibilité d’ajouter une pièce jointe (photo, document).
+
+Suivi du statut
+
+    Chaque plainte reçoit un identifiant unique.
+
+    L’utilisateur peut consulter l’évolution : Enregistrée → En cours → Résolue.
+
+Tableau de bord citoyen
+
+    Liste des plaintes déposées par l’utilisateur.
+
+    Statut et date de mise à jour visibles.
+
+Interface administrateur
+
+    Consultation des plaintes reçues.
+
+    Attribution à un agent ou service.
+
+    Mise à jour du statut et ajout de réponse.
+
+Notifications
+
+    Email ou SMS pour informer le citoyen des changements de statut.
+
+    Confirmation de dépôt de plainte.
+
+Authentification basique
+
+    Inscription/connexion pour les citoyens.
+
+    Gestion des rôles : citoyen vs admin.
