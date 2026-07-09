@@ -66,16 +66,6 @@
                         class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500"
                         placeholder="••••••••">
                 </div>
-                
-                <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
-                    <select id="role" name="role" 
-                        class="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500">
-                        <option value="citoyen" selected>Citoyen</option>
-                        <option value="agent">Agent</option>
-                        <option value="admin">Administrateur</option>
-                    </select>
-                </div>
             </div>
             
             <div>

@@ -1,39 +1,35 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PlainteController;
 // Page d'accueil
 Route::get('/', function () {
     return view('index');
 })->name('index');
 
 // Authentification
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('auth.login');
-
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('auth.register');
+Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login.post');
+Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
+Route::post('/register', [AuthController::class, 'sign'])->name('auth.register.post');
 
 // Plaintes
-Route::get('/complaints/create', function () {
-    return view('complaints.create');
-})->name('complaints.create');
+Route::get('/complaints/create', [PlainteController::class, 'create'])->name('complaints.create');
+Route::get('/complaints/{id}', [PlainteController::class, 'show'])->name('complaint.show');
 
-Route::get('/complaints/{id}', function ($id) {
-    return view('complaints.show', ['id' => $id]);
-})->name('complaint.show');
 
+Route::get('/complaints/{id}/users/{user}', function ($id, $user) {
+
+})->name('complaint.show.user');
 
 Route::post('/complaints/store', function () {
     
 })->name('complaints.store');
 
 
-Route::get('/complaints', function () {
-    return view('complaints.index');
-})->name('complaints.index');
+Route::get('/complaints', [PlainteController::class, 'index'])->name('complaints.index');
 
 
 Route::get('/complaints/{id}/edit', function ($id) {
@@ -85,6 +81,13 @@ Route::get('/feedback/store', function () {
     return view('feedback.store');
 })->name('feedback.store');
 
-Route::get('reset/password', function () {
-    
-})->name('password.request');
+Route::get('reset/password', [AuthController::class, 'showResetForm'])->name('password.request');
+
+// Gestion des rôles
+Route::get('/roles',[RoleController::class, 'index'])->name('roles.index');
+Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+Route::get('/roles/{id}',[RoleController::class, 'show'])->name('roles.show')->whereNumber('id');
+Route::delete('/roles/{id}/delete', [RoleController::class, 'destroy'])->name('roles.destroy')->whereNumber('id');
+Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
+Route::put('/roles/{id}/update', [RoleController::class, 'update'])->name('roles.update');
