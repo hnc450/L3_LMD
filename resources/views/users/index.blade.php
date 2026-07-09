@@ -19,7 +19,11 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm text-gray-600">Total plaintes</p>
-                        <p class="text-2xl font-bold text-royal-blue-700">{{ $complaints->count() ?? 0 }}</p>
+                         @if(isset($complaints) && $complaints->count() > 0)
+                            <p class="text-2xl font-bold text-royal-blue-700">{{ $complaints->count() }}</p>
+                        @else
+                        <p class="text-2xl font-bold text-royal-blue-700">{{  0 }}</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -62,7 +66,7 @@
         <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
             <h2 class="text-xl font-bold text-royal-blue-700 mb-4">Actions rapides</h2>
             <div class="flex flex-wrap gap-4">
-                <a href="{{ route('complaint.create') }}" class="bg-royal-blue-600 text-white px-6 py-3 rounded-lg hover:bg-royal-blue-700 transition-colors flex items-center">
+                <a href="{{ route('complaints.create') }}" class="bg-royal-blue-600 text-white px-6 py-3 rounded-lg hover:bg-royal-blue-700 transition-colors flex items-center">
                     <span class="mr-2">➕</span> Nouvelle plainte
                 </a>
                 <a href="{{ route('notifications.index') }}" class="bg-white border-2 border-royal-blue-600 text-royal-blue-600 px-6 py-3 rounded-lg hover:bg-royal-blue-50 transition-colors flex items-center">
@@ -135,7 +139,7 @@
                         <tr>
                             <td colspan="6" class="px-6 py-12 text-center text-gray-500">
                                 <p class="text-lg">Aucune plainte pour le moment</p>
-                                <a href="{{ route('complaint.create') }}" class="text-royal-blue-600 hover:text-royal-blue-900 font-medium mt-2 inline-block">Soumettre votre première plainte</a>
+                                <a href="{{ route('complaints.create') }}" class="text-royal-blue-600 hover:text-royal-blue-900 font-medium mt-2 inline-block">Soumettre votre première plainte</a>
                             </td>
                         </tr>
                         @endforelse

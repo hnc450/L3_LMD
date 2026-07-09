@@ -10,7 +10,7 @@
             <p class="mt-2 text-gray-600">Rejoignez la plateforme pour signaler vos plaintes</p>
         </div>
         
-        <form class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg" method="POST" action="{{ route('auth.register') }}">
+        <form class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg" method="POST" action="{{ route('auth.signup') }}">
             @csrf
             
             @if ($errors->any())
@@ -27,9 +27,9 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
-                        <input id="nom" name="nom" type="text" required 
+                        <input id="nom" name="name" type="text" required 
                             class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500"
-                            placeholder="Votre nom" value="{{ old('nom') }}">
+                            placeholder="Votre nom" value="{{ old('name') }}">
                     </div>
                     <div>
                         <label for="prenom" class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
@@ -48,9 +48,9 @@
                 
                 <div>
                     <label for="telephone" class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
-                    <input id="telephone" name="telephone" type="tel" required 
+                    <input id="telephone" name="phone" type="tel" required 
                         class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500"
-                        placeholder="+221 77 123 45 67" value="{{ old('telephone') }}">
+                        placeholder="+221 77 123 45 67" value="{{ old('phone') }}">
                 </div>
                 
                 <div>

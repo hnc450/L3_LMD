@@ -41,15 +41,20 @@ class AuthController extends Controller
     public function sign(Request $request)
     {
         $request->validate([
-            'name' => ['required','string','max:255'],
-            'email' => ['required','email','unique:users,email'],
-            'password' => ['required','confirmed','min:8'],
+            'name' => ['required','min:3','max:255'],
+            'prenom' => ['required','min:3','max:255'],
+            'email' => ['required','email','min:9','max:255'],
+            'password' => ['required','min:8','max:16'],
+            'phone' => ['required','min:9','max:16','regex:/^(?:\+243|0)\d{8,9}$/'],
+            'password_confirmation' => ['required','same:password']
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->name . ' ' . $request->prenom,
             'email'=> $request->email,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'id_role' => 1, // Assurez-vous que le rôle "citoyen" a l'ID 2 dans votre table des rôles
         ]);
 
         Auth::login($user);
