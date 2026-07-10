@@ -15,7 +15,7 @@ class PlainteRequest extends FormRequest
     {
         return [
             'id_user' => ['nullable', 'exists:users,id'],
-            'id_service' => ['required', 'exists:services,id'],
+            'service' => ['required', 'exists:services,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'piece_jointe' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf,doc,docx', 'max:4096'],

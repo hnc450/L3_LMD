@@ -24,7 +24,8 @@ class ServiceController extends Controller
      */
     public function services()
     {
-        $services = Service::all();
+        $services = Service::where('responsable_id', '!=', null)->paginate(6); 
+       
         return view('services', compact('services'));
     }
 
@@ -72,7 +73,13 @@ class ServiceController extends Controller
     public function edit(string $id)
     {
         $service = Service::findOrFail($id);
-        return view('services.edit', compact('service'));
+        $responsables = User::whereHas('role', function ($q) {
+            $q->where('name', 'responsable');
+        })->get();
+
+   
+
+        return view('services.edit', compact('service', 'responsables'));
     }
 
     /**
@@ -82,7 +89,7 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
         $data = $request->validated();
-
+      
         // Gestion de l'image
         if ($request->hasFile('image')) {
             // Supprimer l’ancienne image si elle existe

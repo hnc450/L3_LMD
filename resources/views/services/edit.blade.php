@@ -51,13 +51,17 @@
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Responsable</label>
                     <select name="responsable_id" 
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-royal-blue-500 transition">
-                        <option value="">-- Aucun responsable --</option>
-                        @foreach($responsables ?? [] as $responsable)
+                        <option value="">Selectionner un responsable</option>
+                        @forelse($responsables ?? [] as $responsable)
                             <option value="{{ $responsable->id }}" 
                                 {{ old('responsable_id', $service->responsable_id ?? '') == $responsable->id ? 'selected' : '' }}>
                                 {{ $responsable->name }}
                             </option>
-                        @endforeach
+                        @empty
+                            <option value="">Aucun responsable disponible</option>
+                        @endforelse
+
+                        
                     </select>
                     @error('responsable_id') <p class="text-red-600 text-sm mt-2">{{ $message }}</p> @enderror
                 </div>

@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Http\Requests\PlainteRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class PlainteController extends Controller
 {
@@ -22,10 +23,11 @@ class PlainteController extends Controller
     /**
      * Formulaire de création
      */
-    public function create()
+    public function create(Request $request)
     {
         $services = Service::all();
-        return view('complaints.create', compact('services'));
+        $serviceId = $request->query('service') ?? null; // Récupère l'ID du service depuis la requête, ou null si non présent
+        return view('complaints.create', compact('services', 'serviceId'));
     }
 
     /**

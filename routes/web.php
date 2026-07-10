@@ -18,6 +18,7 @@ Route::get('/', function () {
 // Administration de la plateforme
 Route::prefix('admin')->group(function () {
      Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+
      Route::get('/roles',[RoleController::class, 'index'])->name('roles.index');
      Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
      Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
@@ -25,6 +26,7 @@ Route::prefix('admin')->group(function () {
      Route::delete('/roles/{id}/delete', [RoleController::class, 'destroy'])->name('roles.destroy')->whereNumber('id');
      Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
      Route::put('/roles/{id}/update', [RoleController::class, 'update'])->name('roles.update');
+
      Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
      Route::get('/users/create', [AdminController::class, 'create'])->name('users.create');
      Route::get('/users/{id}/edit', [AdminController::class, 'edit'])->name('users.edit');
@@ -32,6 +34,9 @@ Route::prefix('admin')->group(function () {
      Route::post('/users/store', [AdminController::class, 'store'])->name('users.store');
      Route::put('/users/{id}/update', [AdminController::class, 'update'])->name('users.update');
      Route::get('/users/{id}/show', [AdminController::class, 'show'])->name('users.show')->whereNumber('id');
+
+     Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+     Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');  
 });
 
 // Authentification
@@ -59,7 +64,13 @@ Route::prefix('users')->group(function(){
 });
 
 // Interface agent
-Route::get('/agent', [AgentController::class, 'index'])->name('agent.index');
+Route::prefix('agents')->group(function(){
+
+    Route::get('/', [AgentController::class, 'index'])->name('agent.index');
+    Route::get('/show/{id}/complaints', [AgentController::class, 'show'])->name('agent.show.complaints');
+    Route::post('', [AgentController::class, 'respond'])->name('agent.respond');
+
+});
 
 // Notifications
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
@@ -84,50 +95,11 @@ Route::get('reset/password', [AuthController::class, 'showResetForm'])->name('pa
 
 
 // Gestion des services (CRUD via closures)
-
-Route::get('/service', [ServiceController::class, 'services'])->name('services');
-Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
-Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');
+Route::get('/services', [ServiceController::class, 'services'])->name('services');
 
 
-Route::post('/services/store', function (Request $request) {
-    $data = $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'nullable|string',
-    ]);
-
-    $service = new Service();
-    $service->name = $data['name'];
-    $service->description = $data['description'] ?? null;
-    $service->save();
-
-    return redirect()->route('services.index');
-})->name('services.store');
-
-Route::get('/services/{id}', function ($id) {
-    $service = Service::findOrFail($id);
-    return view('services.show', ['service' => $service]);
-})->name('services.show')->whereNumber('id');
-
-Route::get('/services/{id}/edit', function ($id) {
-    $service = Service::findOrFail($id);
-    return view('services.edit', ['service' => $service]);
-})->name('services.edit')->whereNumber('id');
-
-Route::put('/services/{id}/update', function (Request $request, $id) {
-    $service = Service::findOrFail($id);
-    $data = $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'nullable|string',
-    ]);
-    $service->name = $data['name'];
-    $service->description = $data['description'] ?? null;
-    $service->save();
-    return redirect()->route('services.index');
-})->name('services.update');
-
-Route::delete('/services/{id}/delete', function ($id) {
-    $service = Service::findOrFail($id);
-    $service->delete();
-    return redirect()->route('services.index');
-})->name('services.destroy');
+Route::post('/services/store', [ServiceController::class, 'store'])->name('services.store');
+Route::get('/services/{id}', [ServiceController::class, 'show'])->name('services.show')->whereNumber('id');
+Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('services.edit')->whereNumber('id');
+Route::put('/services/{id}/update',[ServiceController::class, 'update'])->name('services.update')->whereNumber('id');
+Route::delete('/services/{id}/delete',[ServiceController::class, 'destroy'])->name('services.destroy')->whereNumber('id');
