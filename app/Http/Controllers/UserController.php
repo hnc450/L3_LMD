@@ -1,21 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
-
+ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
-class AdminController extends Controller
+use App\Models\Plainte;
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('admins.index');
-    }
-    public function users(){
-        $users = \App\Models\User::all();
-        return view('admins.users', compact('users'));
+       
+        $plaintes = Plainte::with('service','user')
+        ->where('id_user', Auth::id()) 
+        ->latest()
+        ->paginate(10);
+
+    
+        return view('users.index', compact('plaintes'));
     }
 
     /**
@@ -23,7 +26,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admins.create_user');
+        //
     }
 
     /**
@@ -39,8 +42,7 @@ class AdminController extends Controller
      */
     public function show(string $id)
     {
-         $user = \App\Models\User::findOrFail($id);
-        return view('admins.users.show', compact('user'));
+        //
     }
 
     /**
@@ -48,8 +50,7 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        $user = \App\Models\User::findOrFail($id);
-        return view('admins.users.edit', ['user' => $user]);
+        //
     }
 
     /**

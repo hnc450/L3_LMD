@@ -50,25 +50,24 @@
                     <select id="service" name="service" required 
                         class="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500">
                         <option value="">Sélectionnez un service</option>
-                        <option value="eau">Eau</option>
-                        <option value="electricite">Électricité</option>
-                        <option value="voirie">Voirie</option>
-                        <option value="proprete">Propreté</option>
-                        <option value="sante">Santé</option>
-                        <option value="education">Éducation</option>
-                        <option value="securite">Sécurité</option>
-                        <option value="administration">Administration</option>
-                        <option value="autre">Autre</option>
+                        @forelse($services as $service)
+                            <option value="{{ $service->id }}" {{ old('service') == $service->id ? 'selected' : '' }}>
+                                {{ $service->name }}
+                            </option>
+                        @empty
+                            <option value="" disabled>No services available</option>
+                        @endforelse
                     </select>
                 </div>
-                
+
                 <div>
-                    <label for="titre" class="block text-sm font-medium text-gray-700 mb-1">Titre de la plainte *</label>
-                    <input id="titre" name="titre" type="text" required 
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Titre de la plainte *</label>
+                    <input id="title" name="title" type="text" required 
                         class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500"
-                        placeholder="Résumé court du problème" value="{{ old('titre') }}">
+                        placeholder="Résumé court du problème" value="{{ old('title') }}">
                 </div>
                 
+      
                 <div>
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description détaillée *</label>
                     <textarea id="description" name="description" rows="5" required 
@@ -77,10 +76,10 @@
                 </div>
                 
                 <div>
-                    <label for="localisation" class="block text-sm font-medium text-gray-700 mb-1">Localisation</label>
-                    <input id="localisation" name="localisation" type="text" 
+                    <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Localisation</label>
+                    <input id="location" name="location" type="text" 
                         class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500"
-                        placeholder="Adresse ou quartier" value="{{ old('localisation') }}">
+                        placeholder="Adresse ou quartier" value="{{ old('location') }}">
                 </div>
                 
                 <div>

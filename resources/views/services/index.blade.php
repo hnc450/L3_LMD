@@ -3,58 +3,71 @@
 @section('title','Gestion des services')
 
 @section('content')
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="container mx-auto px-4">
-        <div class="mb-8 flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-royal-blue-700">Services</h1>
-                <p class="text-gray-600 mt-2">Liste des services publics gérés par la plateforme</p>
-            </div>
-            <div>
-                <a href="{{ route('services.create') }}" class="bg-royal-blue-600 text-white px-4 py-2 rounded-lg hover:bg-royal-blue-700 transition-colors">➕ Nouveau service</a>
-            </div>
-        </div>
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8">
+<div class="container mx-auto px-6">
+<div class="flex items-center justify-between mb-8 bg-white rounded-2xl shadow p-6 border">
+<div>
+<h1 class="text-3xl font-bold text-royal-blue-700 flex items-center gap-3">
+<i class="fa-solid fa-building"></i> Gestion des services
+</h1>
+<p class="text-gray-500 mt-2">Administration des services publics</p>
+</div>
+<a href="{{ route('services.create') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-royal-blue-600 text-white hover:bg-royal-blue-700">
+<i class="fa-solid fa-plus"></i> Nouveau service
+</a>
+</div>
 
-        <div class="bg-white rounded-lg shadow-lg overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($services ?? [] as $service)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-royal-blue-600">#{{ $service->id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $service->name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ Str::limit($service->description ?? '-', 80) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <div class="flex gap-3">
-                                <a href="{{ route('services.show', $service->id) }}" class="text-royal-blue-600 hover:text-royal-blue-900 font-medium">Voir</a>
-                                <a href="{{ route('services.edit', $service->id) }}" class="text-green-600 hover:text-green-900 font-medium">Modifier</a>
-                                <form method="POST" action="{{ route('services.destroy', $service->id) }}" onsubmit="return confirm('Supprimer ce service ?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 font-medium">Supprimer</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="4" class="px-6 py-12 text-center text-gray-500">
-                            <p class="text-lg">Aucun service trouvé</p>
-                            <a href="{{ route('services.create') }}" class="text-royal-blue-600 hover:text-royal-blue-900 font-medium mt-2 inline-block">Créer un service</a>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+<div class="bg-white rounded-2xl shadow overflow-hidden">
+<div class="p-5 border-b flex justify-between">
+<input type="text" placeholder="Rechercher un service..." class="w-80 rounded-xl border px-4 py-2 focus:ring-2 focus:ring-royal-blue-500">
+</div>
 
-    </div>
+<div class="overflow-x-auto">
+<table class="min-w-full">
+<thead class="bg-gray-100">
+<tr>
+<th class="px-6 py-4">Image</th>
+<th class="px-6 py-4 text-left">Service</th>
+<th class="px-6 py-4 text-left">Responsable</th>
+<th class="px-6 py-4 text-left">Description</th>
+<th class="px-6 py-4 text-left">Date</th>
+<th class="px-6 py-4 text-center">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y">
+@forelse($services as $service)
+<tr class="hover:bg-blue-50 transition">
+<td class="px-6 py-4">
+<img src="{{ $service->image ? asset('storage/'.$service->image) : asset('images/no-image.png') }}" class="w-14 h-14 rounded-xl object-cover">
+</td>
+<td class="px-6 py-4 font-semibold">{{ $service->name }}</td>
+<td class="px-6 py-4">{{ $service->responsable->name ?? 'Non affecté' }}</td>
+<td class="px-6 py-4">{{ Str::limit($service->description,60) }}</td>
+<td class="px-6 py-4">{{ optional($service->created_at)->format('d/m/Y') }}</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-2">
+<a href="{{ route('services.show',$service->id) }}" class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-700 hover:text-white flex items-center justify-center"><i class="fa-solid fa-eye"></i></a>
+<a href="{{ route('services.edit',$service->id) }}" class="w-10 h-10 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-500 hover:text-white flex items-center justify-center"><i class="fa-solid fa-pen"></i></a>
+<form method="POST" action="{{ route('services.destroy',$service->id) }}">
+@csrf @method('DELETE')
+<button onclick="return confirm('Supprimer ce service ?')" class="w-10 h-10 rounded-lg bg-red-100 text-red-700 hover:bg-red-600 hover:text-white flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
+</form>
+</div>
+</td>
+</tr>
+@empty
+<tr><td colspan="6" class="py-16 text-center text-gray-400">
+<i class="fa-solid fa-building-circle-xmark text-6xl mb-4"></i>
+<p>Aucun service disponible.</p>
+</td></tr>
+@endforelse
+</tbody>
+</table>
+</div>
+@if(isset($services) && method_exists($services,'links'))
+<div class="p-6 border-t">{{ $services->links() }}</div>
+@endif
+</div>
+</div>
 </div>
 @endsection

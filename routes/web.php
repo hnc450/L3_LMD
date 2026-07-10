@@ -7,19 +7,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlainteController;
 use App\Models\Service;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AgentController;
 use Illuminate\Http\Request;
 // Page d'accueil
 Route::get('/', function () {
     return view('index');
 })->name('index');
 
-
 // Administration de la plateforme
 Route::prefix('admin')->group(function () {
-
-     Route::get('/', function () {
-     return view('admins.index');
-     })->name('admin.index');
+     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
      Route::get('/roles',[RoleController::class, 'index'])->name('roles.index');
      Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
      Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
@@ -27,7 +25,7 @@ Route::prefix('admin')->group(function () {
      Route::delete('/roles/{id}/delete', [RoleController::class, 'destroy'])->name('roles.destroy')->whereNumber('id');
      Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
      Route::put('/roles/{id}/update', [RoleController::class, 'update'])->name('roles.update');
-     Route::get('/users', [AdminController::class, 'index'])->name('admin.users');
+     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
      Route::get('/users/create', [AdminController::class, 'create'])->name('users.create');
      Route::get('/users/{id}/edit', [AdminController::class, 'edit'])->name('users.edit');
      Route::delete('/users/{id}/delete', [AdminController::class, 'destroy'])->name('users.destroy');
@@ -48,58 +46,29 @@ Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout')
 // Plaintes
 Route::get('/complaints/create', [PlainteController::class, 'create'])->name('complaints.create');
 Route::get('/complaints/{id}', [PlainteController::class, 'show'])->name('complaint.show');
-
-Route::get('/complaints/{id}/users/{user}', function ($id, $user) {
-
-})->name('complaint.show.user');
-
-Route::post('/complaints/store', function () {
-    
-})->name('complaints.store');
-
-
+Route::get('/complaints/{id}/users/{user}', [PlainteController::class, 'showUser'])->name('complaint.show.user');
+Route::post('/complaints/store', [PlainteController::class, 'store'])->name('complaints.store');
 Route::get('/complaints', [PlainteController::class, 'index'])->name('complaints.index');
-
-
-Route::get('/complaints/{id}/edit', function ($id) {
-    return view('complaints.edit', ['id' => $id]);
-})->name('complaint.edit');
-
-Route::get('/complaints/{id}/responses', function ($id) {
-    return view('complaints.responses', ['id' => $id]);
-})->name('complaint.responses');
-
+Route::get('/complaints/{id}/edit', [PlainteController::class, 'edit'])->name('complaint.edit');
+Route::get('/complaints/{id}/responses', [PlainteController::class, 'responses'])->name('complaint.responses');
 
 
 // Tableau de bord citoyen
 Route::prefix('users')->group(function(){
-
-    Route::get('/dashboard', function () {
-        return view('users.index');
-    })->name('dashboard');
-
+    Route::get('/', [UserController::class, 'index'])->name('dashboard');
 });
 
-
 // Interface agent
-Route::get('/agent', function () {
-    return view('agents.index');
-})->name('agent.index');
+Route::get('/agent', [AgentController::class, 'index'])->name('agent.index');
 
 // Notifications
-Route::get('/notifications', function () {
-    return view('notifications.index');
-})->name('notifications.index');
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
 // Feedback
-Route::get('/feedback/{complaint_id}', function ($complaint_id) {
-    return view('feedback.create', ['complaint_id' => $complaint_id]);
-})->name('feedback.create');
+Route::get('/feedback/{complaint_id}', [FeedbackController::class, 'create'])->name('feedback.create');
 
 // Statistiques
-Route::get('/statistics', function () {
-    return view('statistics.index');
-})->name('statistics.index');
+Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics.index');
 
 // Logs et traçabilité
 Route::get('/logs', function () {

@@ -2,63 +2,104 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Plainte;
+use App\Models\Service;
+use App\Http\Requests\PlainteRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PlainteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Liste des plaintes
      */
     public function index()
     {
-        return view('complaints.index');
+        $plaintes = Plainte::with('service','user')->latest()->paginate(10);
+        return view('admins.complaints.index', compact('plaintes'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Formulaire de création
      */
     public function create()
     {
-        return view('complaints.create');
+        $services = Service::all();
+        return view('complaints.create', compact('services'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistrer une plainte
      */
-    public function store(Request $request)
+    public function store(PlainteRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        // Associer l’utilisateur connecté
+        $data['id_user'] = Auth::id();
+
+        // Gestion de la pièce jointe
+        if ($request->hasFile('piece_jointe')) {
+            $data['piece_jointe'] = $request->file('piece_jointe')->store('plaintes', 'public');
+        }
+
+        Plainte::create($data);
+
+        return redirect()->route('complaints.index')->with('success', 'Plainte enregistrée avec succès');
     }
 
     /**
-     * Display the specified resource.
+     * Afficher une plainte
      */
     public function show(string $id)
     {
-        return view('complaints.show', ['id' => $id]);
+        $plainte = Plainte::with('service','user')->findOrFail($id);
+        return view('complaints.show', compact('plainte'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Formulaire d’édition
      */
     public function edit(string $id)
     {
-        return view('complaints.edit', ['id' => $id]);
+        $plainte = Plainte::findOrFail($id);
+        $services = Service::all();
+        return view('complaints.edit', compact('plainte','services'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Mettre à jour une plainte
      */
-    public function update(Request $request, string $id)
+    public function update(PlainteRequest $request, string $id)
     {
-        //
+        $plainte = Plainte::findOrFail($id);
+        $data = $request->validated();
+
+        if ($request->hasFile('piece_jointe')) {
+            if ($plainte->piece_jointe) {
+                Storage::disk('public')->delete($plainte->piece_jointe);
+            }
+            $data['piece_jointe'] = $request->file('piece_jointe')->store('plaintes', 'public');
+        }
+
+        $plainte->update($data);
+
+        return redirect()->route('complaints.index')->with('success', 'Plainte mise à jour avec succès');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprimer une plainte
      */
     public function destroy(string $id)
     {
-        //
+        $plainte = Plainte::findOrFail($id);
+
+        if ($plainte->piece_jointe) {
+            Storage::disk('public')->delete($plainte->piece_jointe);
+        }
+
+        $plainte->delete();
+
+        return redirect()->route('complaints.index')->with('success', 'Plainte supprimée avec succès');
     }
 }

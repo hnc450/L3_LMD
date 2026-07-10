@@ -104,7 +104,7 @@
 
             </div>
 
-            <a href="{{ route('login') }}"
+            <a href="{{ route('auth.login') }}"
                 class="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition">
 
                 Se connecter
@@ -252,7 +252,7 @@ Déposer une plainte
 
 @else
 
-<a href="{{ route('login') }}"
+<a href="{{ route('auth.login') }}"
 class="block text-center bg-gray-100 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
 
 Se connecter

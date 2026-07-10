@@ -4,18 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class AgentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('admins.index');
-    }
-    public function users(){
-        $users = \App\Models\User::all();
-        return view('admins.users', compact('users'));
+        //
     }
 
     /**
@@ -23,7 +19,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admins.create_user');
+        //
     }
 
     /**
@@ -39,8 +35,7 @@ class AdminController extends Controller
      */
     public function show(string $id)
     {
-         $user = \App\Models\User::findOrFail($id);
-        return view('admins.users.show', compact('user'));
+        //
     }
 
     /**
@@ -48,8 +43,7 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        $user = \App\Models\User::findOrFail($id);
-        return view('admins.users.edit', ['user' => $user]);
+        //
     }
 
     /**
