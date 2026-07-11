@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
     /**
@@ -14,8 +15,12 @@ class AdminController extends Controller
         return view('admins.index');
     }
     public function users(){
-        $users = \App\Models\User::all();
-        return view('admins.users', compact('users'));
+        $users = User::paginate(50);
+        $userCount = User::count();
+        $adminCount = User::where('id_role', 3)->count();
+        $responsablesCount = User::where('id_role', 4)->count();
+        $citoyensCount = User::where('id_role', 1)->count();
+        return view('admins.users', compact('users', 'userCount', 'adminCount', 'responsablesCount', 'citoyensCount'));
     }
 
     /**
@@ -55,10 +60,29 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+public function updateUser(Request $request, User $user)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'phone' => 'nullable|string|max:30',
+        'password' => 'nullable|min:8|confirmed',
+    ]);
+
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->phone = $request->phone;
+
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
     }
+
+    $user->update();
+
+    return redirect()
+        ->route('admin.users')
+        ->with('success', 'Utilisateur mis à jour avec succès.');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -67,4 +91,22 @@ class AdminController extends Controller
     {
         //
     }
+
+    
+
+public function destroyUser(User $user)
+{
+    // Empêcher un administrateur de supprimer son propre compte
+    if ($user->id === auth()->id()) {
+        return redirect()
+            ->back()
+            ->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+    }
+
+    $user->delete();
+
+    return redirect()
+        ->route('admin.users')
+        ->with('success', 'Utilisateur supprimé avec succès.');
+}
 }

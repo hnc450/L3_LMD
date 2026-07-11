@@ -30,9 +30,9 @@ Route::prefix('admin')->group(function () {
      Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
      Route::get('/users/create', [AdminController::class, 'create'])->name('users.create');
      Route::get('/users/{id}/edit', [AdminController::class, 'edit'])->name('users.edit');
-     Route::delete('/users/{id}/delete', [AdminController::class, 'destroy'])->name('users.destroy');
+     Route::delete('/users/{user}/delete', [AdminController::class, 'destroyUser'])->name('users.destroy');
      Route::post('/users/store', [AdminController::class, 'store'])->name('users.store');
-     Route::put('/users/{id}/update', [AdminController::class, 'update'])->name('users.update');
+     Route::put('/users/{id}/update', [AdminController::class, 'updateUser'])->name('users.update');
      Route::get('/users/{id}/show', [AdminController::class, 'show'])->name('users.show')->whereNumber('id');
 
      Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
@@ -61,6 +61,14 @@ Route::get('/complaints/{id}/responses', [PlainteController::class, 'responses']
 // Tableau de bord citoyen
 Route::prefix('users')->group(function(){
     Route::get('/', [UserController::class, 'index'])->name('dashboard');
+
+    Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::put('/profile/{id}/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
+    // penser  à  un controller pour le profile et les settings pour séparer les responsabilités
+    Route::get('/settings', [UserController::class, 'settings'])->name('user.settings');
+ 
+    Route::put('/settings/email', [UserController::class, 'updateEmail'])->name('user.settings.email');
+    Route::put('/settings/password', [UserController::class, 'updatePassword'])->name('user.settings.password');
 });
 
 // Interface agent

@@ -59,7 +59,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/dashboard')->with('success','Compte créé avec succès');
+        return redirect('/users')->with('success','Compte créé avec succès');
     }
 
     // 🔄 Déconnexion

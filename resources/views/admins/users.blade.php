@@ -68,15 +68,11 @@
 
                     <div>
 
-                        <p class="text-gray-500">
-
-                            Utilisateurs
-
-                        </p>
+                        <p class="text-gray-500">Utilisateur{{ $userCount > 0 ? 's' : ''}}</p>
 
                         <h2 class="text-4xl font-bold mt-2">
 
-                            {{ $users->count() }}
+                            {{ $userCount ?? 0 }}
 
                         </h2>
 
@@ -100,13 +96,13 @@
 
                         <p class="text-gray-500">
 
-                            Administrateurs
+                            Administrateur{{ $adminCount > 0 ? 's' : '' }}
 
                         </p>
 
                         <h2 class="text-4xl font-bold">
 
-                            {{ $admins ?? 0 }}
+                            {{ $adminCount ?? 0 }}
 
                         </h2>
 
@@ -130,13 +126,13 @@
 
                         <p class="text-gray-500">
 
-                            Responsables
+                            Responsable{{ $responsablesCount > 0 ? 's' : '' }}
 
                         </p>
 
                         <h2 class="text-4xl font-bold">
 
-                            {{ $responsables ?? 0 }}
+                            {{ $responsablesCount ?? 0 }}
 
                         </h2>
 
@@ -160,13 +156,13 @@
 
                         <p class="text-gray-500">
 
-                            Citoyens
+                            Citoyen{{ $citoyensCount > 0 ? 's' : '' }}
 
                         </p>
 
                         <h2 class="text-4xl font-bold">
 
-                            {{ $citoyens ?? 0 }}
+                            {{ $citoyensCount ?? 0 }}
 
                         </h2>
 

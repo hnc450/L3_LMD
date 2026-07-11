@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
  use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Plainte;
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
@@ -45,6 +46,16 @@ class UserController extends Controller
         //
     }
 
+    public function settings()
+    {
+        return view('users.settings');
+    }
+
+    public function profile()
+    {
+        return view('users.profil');
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -60,6 +71,58 @@ class UserController extends Controller
     {
         //
     }
+
+    public function updateProfile(Request $request)
+   {
+    $request->validate([
+        'name'  => 'required|string|max:255',
+        'phone' => 'nullable|string|max:30',
+    ]);
+
+    $user = auth()->user();
+
+    $user->update([
+        'name'  => $request->name,
+        'phone' => $request->phone,
+    ]);
+
+    return back()->with('success', 'Votre profil a été mis à jour avec succès.');
+  }
+
+  public function updateEmail(Request $request)
+{
+    $request->validate([
+        'email' => ['required', 'email', 'unique:users,email'],
+    ]);
+
+    $user = auth()->user();
+
+    $user->email = $request->email;
+    $user->save();
+
+    return back()->with('success', 'Adresse e-mail mise à jour.');
+}
+
+public function updatePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => ['required'],
+        'password' => ['required', 'confirmed', 'min:8'],
+    ]);
+
+    $user = auth()->user();
+
+    if (!Hash::check($request->current_password, $user->password)) {
+        return back()->withErrors([
+            'current_password' => 'Le mot de passe actuel est incorrect.'
+        ]);
+    }
+
+    $user->password = Hash::make($request->password);
+    $user->save();
+
+    return back()->with('success', 'Mot de passe modifié avec succès.');
+}
 
     /**
      * Remove the specified resource from storage.
