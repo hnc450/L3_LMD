@@ -19,23 +19,14 @@ class ServiceController extends Controller
         return view('services.index', compact('services'));
     }
 
-    /**
-     * Afficher la page des services (vue publique)
-     */
-    public function services()
-    {
-        $services = Service::where('responsable_id', '!=', null)->paginate(6); 
-       
-        return view('services', compact('services'));
-    }
-
+    
     /**
      * Formulaire de création
      */
     public function create()
     {
         $responsables = User::whereHas('role', function ($q) {
-            $q->where('name', 'Responsable');
+            $q->where('name', 'responsable');
         })->get();
 
         return view('services.create', compact('responsables'));

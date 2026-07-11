@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Plainte;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 class UserController extends Controller
 {
     /**
@@ -33,11 +34,41 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
 
+public function store(Request $request)
+{
+    $request->validate([
+
+        'name' => ['required','string','max:255'],
+
+        'email' => ['required','email','unique:users,email'],
+
+        'phone' => ['nullable','string','max:30'],
+
+        'role' => ['required'],
+
+        'password' => ['required', 'confirmed','min:8'],
+
+    ]);
+
+    User::create([
+
+        'name' => $request->name,
+
+        'email' => $request->email,
+
+        'phone' => $request->phone,
+
+        'id_role' => $request->role,
+
+        'password' => Hash::make($request->password),
+
+    ]);
+
+    return redirect()
+        ->route('admin.users')
+        ->with('success','Utilisateur créé avec succès.');
+}
     /**
      * Display the specified resource.
      */

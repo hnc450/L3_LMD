@@ -28,7 +28,7 @@
             <div class="bg-white rounded-2xl shadow p-6 border-l-4 border-blue-600">
                 <i class="fa-solid fa-folder text-blue-600 text-2xl"></i>
                 <p class="mt-3 text-gray-500">Total</p>
-                <h2 class="text-3xl font-bold">{{ $total ?? ($complaints->count() ?? 0) }}</h2>
+                {{-- <h2 class="text-3xl font-bold">{{ $total ?? ($complaints->count() ?? 0) }}</h2> --}}
             </div>
 
             <div class="bg-white rounded-2xl shadow p-6 border-l-4 border-gray-500">
@@ -87,7 +87,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @forelse($complaints as $complaint)
+                    @forelse($complaints ?? [] as $complaint)
                         <tr class="border-b hover:bg-slate-50">
                             <td class="px-6 py-4 font-bold text-blue-700">#{{ $complaint->id }}</td>
                             <td class="px-6 py-4">{{ $complaint->user->name ?? 'Citoyen' }}</td>
