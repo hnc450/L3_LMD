@@ -13,4 +13,14 @@ class Service extends Model
     {
         return $this->belongsTo(User::class, 'responsable_id');
     }
+
+    public function plaintes()
+    {
+        return $this->hasMany(Plainte::class, 'id_service');
+    }
+
+    public function agents()
+    {
+        return $this->hasMany(User::class, 'id_service')->whereHas('role', fn ($q) => $q->where('name', 'agent'));
+    }
 }

@@ -40,7 +40,7 @@
 
                 </div>
 
-                <a href="{{ route('roles.create') }}"
+                <a href="{{ route('admin.roles.create') }}"
                    class="inline-flex items-center justify-center gap-3 bg-white text-blue-700 px-8 py-4 rounded-2xl font-semibold shadow-xl hover:scale-105 transition">
 
                     <i class="fa-solid fa-plus"></i>
@@ -265,14 +265,14 @@
 
                                 <div class="flex justify-center gap-3">
 
-                                    <a href="{{ route('roles.show',$role->id) }}"
+                                    <a href="{{ route('admin.roles.show',$role->id) }}"
                                        class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center hover:bg-blue-700 hover:text-white transition">
 
                                         <i class="fa-solid fa-eye"></i>
 
                                     </a>
 
-                                    <a href="{{ route('roles.edit',$role->id) }}"
+                                    <a href="{{ route('admin.roles.edit',$role->id) }}"
                                        class="w-10 h-10 rounded-xl bg-green-100 text-green-700 flex items-center justify-center hover:bg-green-700 hover:text-white transition">
 
                                         <i class="fa-solid fa-pen"></i>
@@ -280,7 +280,7 @@
                                     </a>
 
                                     <form method="POST"
-                                          action="{{ route('roles.destroy',$role->id) }}"
+                                          action="{{ route('admin.roles.destroy',$role->id) }}"
                                           onsubmit="return confirm('Supprimer ce rôle ?')">
 
                                         @csrf
@@ -327,7 +327,7 @@
 
                                     </p>
 
-                                    <a href="{{ route('roles.create') }}"
+                                    <a href="{{ route('admin.roles.create') }}"
                                        class="mt-8 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-700 to-cyan-500 text-white font-semibold hover:scale-105 transition">
 
                                         <i class="fa-solid fa-plus mr-2"></i>

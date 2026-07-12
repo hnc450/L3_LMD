@@ -69,7 +69,7 @@
                     </div>
 
                     <form method="POST"
-                          action="{{ route('services.store') }}"
+                          action="{{ route('admin.services.store') }}"
                           enctype="multipart/form-data"
                           class="p-8 space-y-8">
 
@@ -248,7 +248,7 @@
 
                         <div class="flex flex-col sm:flex-row gap-4">
 
-                            <a href="{{ route('services.index') }}"
+                            <a href="{{ route('admin.services.index') }}"
                                class="flex-1 flex justify-center items-center gap-3 py-4 rounded-2xl bg-gray-100 hover:bg-gray-200 font-semibold transition">
 
                                 <i class="fa-solid fa-arrow-left"></i>

@@ -34,7 +34,7 @@ class RoleController extends Controller
      
         Role::create($role);
 
-        return redirect()->route('roles.index')->with('success', 'Rôle créé avec succès.');
+        return redirect()->route('admin.roles.index')->with('success', 'Rôle créé avec succès.');
     }
 
     /**
@@ -65,7 +65,7 @@ class RoleController extends Controller
         $data = $request->validated();
         $role->update($data);
 
-        return redirect()->route('roles.index')->with('success', 'Rôle mis à jour avec succès.');
+        return redirect()->route('admin.roles.index')->with('success', 'Rôle mis à jour avec succès.');
     }
 
     /**
@@ -76,6 +76,6 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $role->delete();
 
-        return redirect()->route('roles.index')->with('success', 'Rôle supprimé avec succès.');
+        return redirect()->route('admin.roles.index')->with('success', 'Rôle supprimé avec succès.');
     }
 }

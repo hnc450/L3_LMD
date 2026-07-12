@@ -12,7 +12,7 @@
 </h1>
 <p class="text-gray-500 mt-2">Administration des services publics</p>
 </div>
-<a href="{{ route('services.create') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-royal-blue-600 text-white hover:bg-royal-blue-700">
+<a href="{{ route('admin.services.create') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-royal-blue-600 text-white hover:bg-royal-blue-700">
 <i class="fa-solid fa-plus"></i> Nouveau service
 </a>
 </div>
@@ -46,9 +46,9 @@
 <td class="px-6 py-4">{{ optional($service->created_at)->format('d/m/Y') }}</td>
 <td class="px-6 py-4">
 <div class="flex justify-center gap-2">
-<a href="{{ route('services.show',$service->id) }}" class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-700 hover:text-white flex items-center justify-center"><i class="fa-solid fa-eye"></i></a>
-<a href="{{ route('services.edit',$service->id) }}" class="w-10 h-10 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-500 hover:text-white flex items-center justify-center"><i class="fa-solid fa-pen"></i></a>
-<form method="POST" action="{{ route('services.destroy',$service->id) }}">
+<a href="{{ route('admin.services.show',$service->id) }}" class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-700 hover:text-white flex items-center justify-center"><i class="fa-solid fa-eye"></i></a>
+<a href="{{ route('admin.services.edit',$service->id) }}" class="w-10 h-10 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-500 hover:text-white flex items-center justify-center"><i class="fa-solid fa-pen"></i></a>
+<form method="POST" action="{{ route('admin.services.destroy',$service->id) }}">
 @csrf @method('DELETE')
 <button onclick="return confirm('Supprimer ce service ?')" class="w-10 h-10 rounded-lg bg-red-100 text-red-700 hover:bg-red-600 hover:text-white flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
 </form>

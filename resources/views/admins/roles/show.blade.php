@@ -168,7 +168,7 @@
 
                         <div class="flex flex-col sm:flex-row gap-4 mt-10">
 
-                            <a href="{{ route('roles.index') }}"
+                            <a href="{{ route('admin.roles.index') }}"
                                class="flex-1 flex justify-center items-center gap-3 py-4 rounded-2xl bg-gray-100 hover:bg-gray-200 transition font-semibold">
 
                                 <i class="fa-solid fa-arrow-left"></i>
@@ -177,7 +177,7 @@
 
                             </a>
 
-                            <a href="{{ route('roles.edit',$role->id) }}"
+                            <a href="{{ route('admin.roles.edit',$role->id) }}"
                                class="flex-1 flex justify-center items-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-blue-700 to-cyan-500 text-white font-semibold shadow-lg hover:scale-105 transition">
 
                                 <i class="fa-solid fa-pen"></i>

@@ -210,7 +210,7 @@
 
                     <div class="mt-6 space-y-4">
 
-                        <a href="{{ route('users.edit',$user->id) }}"
+                        <a href="{{ route('admin.users.edit',$user->id) }}"
                            class="flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-blue-700 to-cyan-500 text-white font-semibold hover:scale-105 transition">
 
                             <i class="fa-solid fa-pen"></i>
@@ -219,7 +219,7 @@
 
                         </a>
 
-                        <form action="{{ route('users.destroy',$user->id) }}"
+                        <form action="{{ route('admin.users.destroy',$user->id) }}"
                               method="POST">
 
                             @csrf

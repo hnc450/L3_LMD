@@ -22,8 +22,8 @@
             </div>
 
             <div class="flex gap-4 mt-6">
-                <a href="{{ route('services.index') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">Retour</a>
-                <a href="{{ route('services.edit', $service->id ?? 0) }}" class="bg-royal-blue-600 text-white px-4 py-2 rounded-lg hover:bg-royal-blue-700 transition-colors">Modifier</a>
+                <a href="{{ route('admin.services.index') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">Retour</a>
+                <a href="{{ route('admin.services.edit', $service->id ?? 0) }}" class="bg-royal-blue-600 text-white px-4 py-2 rounded-lg hover:bg-royal-blue-700 transition-colors">Modifier</a>
             </div>
         </div>
     </div>

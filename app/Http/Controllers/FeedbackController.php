@@ -2,63 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Feedback;
+use App\Models\Plainte;
+use App\Support\PlainteStatut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function create(Plainte $plainte)
     {
-        //
+        if ($plainte->id_user !== Auth::id()) {
+            abort(403);
+        }
+
+        if ($plainte->statut !== PlainteStatut::RESOLUE) {
+            return redirect()->route('complaints.show', $plainte)
+                ->with('error', 'Le feedback n\'est disponible que pour les plaintes résolues.');
+        }
+
+        if ($plainte->feedbacks()->where('id_user', Auth::id())->exists()) {
+            return redirect()->route('complaints.show', $plainte)
+                ->with('info', 'Vous avez déjà donné votre avis.');
+        }
+
+        return view('feedback.create', [
+            'plainte' => $plainte,
+            'complaint' => $plainte,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'complaint_id' => 'required|exists:plaintes,id',
+            'note' => 'required|integer|min:1|max:5',
+            'commentaire' => 'nullable|string|max:1000',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $plainte = Plainte::findOrFail($request->complaint_id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if ($plainte->id_user !== Auth::id()) {
+            abort(403);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        Feedback::create([
+            'id_plainte' => $plainte->id,
+            'id_user' => Auth::id(),
+            'note' => $request->note,
+            'comment' => $request->commentaire,
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('complaints.show', $plainte)->with('success', 'Merci pour votre feedback !');
     }
 }

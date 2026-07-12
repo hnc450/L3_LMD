@@ -41,7 +41,7 @@
 
                 </div>
 
-                <a href="{{ route('users.create') }}"
+                <a href="{{ route('admin.users.create') }}"
                    class="mt-8 lg:mt-0 bg-white text-blue-700 px-6 py-4 rounded-2xl font-bold shadow-lg hover:scale-105 transition">
 
                     <i class="fa-solid fa-user-plus mr-2"></i>
@@ -287,21 +287,21 @@
 
                                 <div class="flex justify-center gap-3">
 
-                                    <a href="{{ route('users.show',$user->id) }}"
+                                    <a href="{{ route('admin.users.show',$user->id) }}"
                                        class="w-10 h-10 rounded-xl bg-blue-100 hover:bg-blue-200 flex items-center justify-center">
 
                                         <i class="fa-solid fa-eye text-blue-700"></i>
 
                                     </a>
 
-                                    <a href="{{ route('users.edit',$user->id) }}"
+                                    <a href="{{ route('admin.users.edit',$user->id) }}"
                                        class="w-10 h-10 rounded-xl bg-yellow-100 hover:bg-yellow-200 flex items-center justify-center">
 
                                         <i class="fa-solid fa-pen text-yellow-700"></i>
 
                                     </a>
 
-                                    <form action="{{ route('users.destroy',$user->id) }}"
+                                    <form action="{{ route('admin.users.destroy',$user->id) }}"
                                           method="POST">
 
                                         @csrf

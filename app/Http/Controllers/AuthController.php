@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User; // ou ton modèle Admin si tu utilises une table différente
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
@@ -19,17 +21,19 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    // 🔑 Connexion
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required','email'],
+            'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/users')->with('success','Connexion réussie');
+            ActivityLogger::log('login', 'Connexion réussie');
+
+            return redirect()->intended(route(Auth::user()->dashboardRoute()))
+                ->with('success', 'Connexion réussie');
         }
 
         return back()->withErrors([
@@ -37,45 +41,55 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // 🆕 Inscription
     public function sign(Request $request)
     {
         $request->validate([
-            'name' => ['required','min:3','max:255'],
-            'prenom' => ['required','min:3','max:255'],
-            'email' => ['required','email','min:9','max:255'],
-            'password' => ['required','min:8','max:16'],
-            'phone' => ['required','min:9','max:16','regex:/^(?:\+243|0)\d{8,9}$/'],
-            'password_confirmation' => ['required','same:password']
+            'name' => ['required', 'min:3', 'max:255'],
+            'prenom' => ['required', 'min:3', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'min:8', 'confirmed'],
+            'phone' => ['required', 'regex:/^(?:\+243|0)\d{8,9}$/'],
         ]);
 
         $user = User::create([
             'name' => $request->name . ' ' . $request->prenom,
-            'email'=> $request->email,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
-            'id_role' => 1, // Assurez-vous que le rôle "citoyen" a l'ID 2 dans votre table des rôles
+            'id_role' => 1,
         ]);
 
         Auth::login($user);
+        ActivityLogger::log('create', 'Inscription citoyen', $user->id);
 
-        return redirect('/users')->with('success','Compte créé avec succès');
+        return redirect()->route('user.dashboard')
+            ->with('success', 'Compte créé avec succès');
     }
 
-    // 🔄 Déconnexion
     public function logout(Request $request)
     {
+        ActivityLogger::log('login', 'Déconnexion');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('success','Déconnecté avec succès');
+        return redirect()->route('auth.login')
+            ->with('success', 'Déconnecté avec succès');
     }
 
-    // 🔧 Formulaire reset password
     public function showResetForm()
     {
         return view('password.reset');
     }
-    
+
+    public function sendResetLink(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink($request->only('email'));
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with('success', 'Un lien de réinitialisation a été envoyé à votre adresse e-mail.')
+            : back()->withErrors(['email' => 'Aucun compte associé à cette adresse.']);
+    }
 }

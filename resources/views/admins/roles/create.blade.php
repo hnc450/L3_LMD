@@ -70,7 +70,7 @@
                     </div>
 
                     <form method="POST"
-                          action="{{ route('roles.store') }}"
+                          action="{{ route('admin.roles.store') }}"
                           class="p-8 space-y-8">
 
                         @csrf
@@ -117,7 +117,7 @@
 
                         <div class="flex flex-col sm:flex-row gap-4">
 
-                            <a href="{{ route('roles.index') }}"
+                            <a href="{{ route('admin.roles.index') }}"
                                class="flex-1 flex justify-center items-center gap-3 py-4 rounded-2xl bg-gray-100 hover:bg-gray-200 transition font-semibold text-gray-700">
 
                                 <i class="fa-solid fa-arrow-left"></i>

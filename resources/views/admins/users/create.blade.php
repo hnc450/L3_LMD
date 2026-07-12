@@ -50,7 +50,7 @@
                 </h2>
             </div>
 
-            <form action="{{ route('users.store') }}"
+            <form action="{{ route('admin.users.store') }}"
                   method="POST"
                   class="p-8">
 

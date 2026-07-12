@@ -25,9 +25,11 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        $responsables = User::whereHas('role', function ($q) {
-            $q->where('name', 'responsable');
-        })->get();
+        $assignedIds = Service::whereNotNull('responsable_id')->pluck('responsable_id');
+
+        $responsables = User::whereHas('role', fn ($q) => $q->where('name', 'responsable'))
+            ->whereNotIn('id', $assignedIds)
+            ->get();
 
         return view('services.create', compact('responsables'));
     }
@@ -39,14 +41,17 @@ class ServiceController extends Controller
     {
         $data = $request->validated();
 
-        // Gestion de l'image
+        if ($error = $this->validateResponsable($data['responsable_id'] ?? null)) {
+            return back()->withErrors(['responsable_id' => $error])->withInput();
+        }
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('services', 'public');
         }
 
         Service::create($data);
 
-        return redirect()->route('services.index')->with('success', 'Service créé avec succès');
+        return redirect()->route('admin.services.index')->with('success', 'Service créé avec succès');
     }
 
     /**
@@ -64,11 +69,16 @@ class ServiceController extends Controller
     public function edit(string $id)
     {
         $service = Service::findOrFail($id);
-        $responsables = User::whereHas('role', function ($q) {
-            $q->where('name', 'responsable');
-        })->get();
+        $assignedIds = Service::whereNotNull('responsable_id')
+            ->where('id', '!=', $service->id)
+            ->pluck('responsable_id');
 
-   
+        $responsables = User::whereHas('role', fn ($q) => $q->where('name', 'responsable'))
+            ->where(function ($q) use ($assignedIds, $service) {
+                $q->whereNotIn('id', $assignedIds)
+                    ->orWhere('id', $service->responsable_id);
+            })
+            ->get();
 
         return view('services.edit', compact('service', 'responsables'));
     }
@@ -80,10 +90,12 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
         $data = $request->validated();
-      
-        // Gestion de l'image
+
+        if ($error = $this->validateResponsable($data['responsable_id'] ?? null, $service->id)) {
+            return back()->withErrors(['responsable_id' => $error])->withInput();
+        }
+
         if ($request->hasFile('image')) {
-            // Supprimer l’ancienne image si elle existe
             if ($service->image) {
                 Storage::disk('public')->delete($service->image);
             }
@@ -92,7 +104,7 @@ class ServiceController extends Controller
 
         $service->update($data);
 
-        return redirect()->route('services.index')->with('success', 'Service mis à jour avec succès');
+        return redirect()->route('admin.services.index')->with('success', 'Service mis à jour avec succès');
     }
 
     /**
@@ -109,6 +121,19 @@ class ServiceController extends Controller
 
         $service->delete();
 
-        return redirect()->route('services.index')->with('success', 'Service supprimé avec succès');
+        return redirect()->route('admin.services.index')->with('success', 'Service supprimé avec succès');
+    }
+
+    private function validateResponsable(?int $responsableId, ?int $exceptServiceId = null): ?string
+    {
+        if (! $responsableId) {
+            return null;
+        }
+
+        $exists = Service::where('responsable_id', $responsableId)
+            ->when($exceptServiceId, fn ($q) => $q->where('id', '!=', $exceptServiceId))
+            ->exists();
+
+        return $exists ? 'Ce responsable gère déjà un autre service.' : null;
     }
 }

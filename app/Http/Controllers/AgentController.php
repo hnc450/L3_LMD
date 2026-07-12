@@ -2,63 +2,90 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Plainte;
+use App\Models\Reponse;
+use App\Services\ActivityLogger;
+use App\Services\InterventionService;
+use App\Services\NotificationService;
+use App\Support\PlainteStatut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AgentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return view('agents.index');
+        $agentId = Auth::id();
+        $agent = Auth::user();
+
+        $query = Plainte::with(['service', 'user'])
+            ->where('agent_id', $agentId)
+            ->when($agent->id_service, fn ($q) => $q->where('id_service', $agent->id_service))
+            ->latest();
+
+        if ($request->filled('statut')) {
+            $query->where('statut', $request->statut);
+        }
+
+        if ($request->filled('priorite')) {
+            $query->where('priorite', $request->priorite);
+        }
+
+        $complaints = $query->paginate(15)->withQueryString();
+
+        return view('agents.index', [
+            'complaints' => $complaints,
+            'actions' => Reponse::with('plainte')->where('agent_id', $agentId)->latest()->take(10)->get(),
+            'statuts' => PlainteStatut::all(),
+            'assignees' => Plainte::where('agent_id', $agentId)->count(),
+            'en_cours' => Plainte::where('agent_id', $agentId)->where('statut', PlainteStatut::EN_COURS)->count(),
+            'resolues' => Plainte::where('agent_id', $agentId)->where('statut', PlainteStatut::RESOLUE)->count(),
+            'urgentes' => Plainte::where('agent_id', $agentId)->where('priorite', 'urgente')->count(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function respond(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'complaint_id' => 'required|exists:plaintes,id',
+            'statut' => ['required', Rule::in([PlainteStatut::EN_COURS, PlainteStatut::RESOLUE, PlainteStatut::REJETEE])],
+            'reponse' => 'required|string|min:10',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $plainte = Plainte::where('id', $request->complaint_id)
+            ->where('agent_id', Auth::id())
+            ->when(Auth::user()->id_service, fn ($q) => $q->where('id_service', Auth::user()->id_service))
+            ->firstOrFail();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $oldStatus = $plainte->statut;
+        $plainte->update(['statut' => $request->statut]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        Reponse::create([
+            'agent_id' => Auth::id(),
+            'complaint_id' => $plainte->id,
+            'message' => $request->reponse,
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        InterventionService::create(
+            $plainte,
+            Auth::user(),
+            'traitement',
+            $request->reponse,
+            $request->statut === PlainteStatut::RESOLUE ? 'terminee' : 'en_cours'
+        );
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        NotificationService::responseAdded($plainte, $request->reponse);
+
+        if ($oldStatus !== $plainte->statut) {
+            NotificationService::statusUpdated($plainte, $oldStatus);
+            if ($plainte->statut === PlainteStatut::RESOLUE) {
+                NotificationService::resolved($plainte);
+            }
+        }
+
+        ActivityLogger::log('update', "Intervention agent sur {$plainte->code_suivi}");
+
+        return back()->with('success', 'Réponse et intervention enregistrées.');
     }
 }

@@ -3,71 +3,110 @@
 @section('title','Tableau de bord Responsable')
 
 @section('content')
-<div class="min-h-screen bg-gray-100 p-6">
-    <div class="flex items-center justify-between mb-8">
+@php use App\Support\PlainteStatut; @endphp
+<div class="space-y-6">
+    <div class="flex flex-wrap justify-between items-center gap-4">
         <div>
-            <h1 class="text-3xl font-bold">Dashboard Responsable</h1>
-            <p class="text-gray-500">Vue d'ensemble du service public.</p>
+            <h1 class="text-2xl font-bold text-gray-800">Tableau de bord — Responsable</h1>
+            <p class="text-gray-500">{{ $service?->name ?? 'Aucun service assigné' }}</p>
         </div>
-        <a href="#" class="bg-indigo-600 text-white px-5 py-3 rounded-xl">Nouvelle intervention</a>
+        <div class="flex gap-3">
+            <a href="{{ route('responsable.agents.create') }}" class="bg-indigo-700 text-white px-5 py-3 rounded-xl font-medium hover:bg-indigo-800">
+                <i class="fa-solid fa-user-plus mr-2"></i>Ajouter un agent
+            </a>
+            <a href="{{ route('responsable.agents') }}" class="border border-indigo-700 text-indigo-700 px-5 py-3 rounded-xl font-medium hover:bg-indigo-50">
+                <i class="fa-solid fa-users mr-2"></i>Mes agents
+            </a>
+        </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-        @php
-        $cards=[
-        ['Plaintes','154','bg-red-500'],
-        ['En attente','28','bg-yellow-500'],
-        ['Interventions','96','bg-blue-500'],
-        ['Agents actifs','18','bg-green-500'],
-        ['Rapports','84','bg-purple-500'],
-        ['Résolues','126','bg-emerald-500'],
-        ['Urgentes','12','bg-orange-500'],
-        ['Satisfaction','94%','bg-cyan-500']
-        ];
-        @endphp
-        @foreach($cards as $card)
-        <div class="bg-white rounded-2xl shadow p-6">
-            <div class="w-12 h-12 {{ $card[2] }} rounded-xl mb-4"></div>
-            <h3 class="text-gray-500">{{ $card[0] }}</h3>
-            <p class="text-3xl font-bold mt-2">{{ $card[1] }}</p>
+    @if($service)
+    <div class="grid md:grid-cols-2 xl:grid-cols-5 gap-4">
+        @foreach([
+            ['label' => 'Plaintes', 'value' => $total ?? 0, 'icon' => 'fa-folder-open', 'color' => 'blue'],
+            ['label' => 'En attente', 'value' => $en_attente ?? 0, 'icon' => 'fa-clock', 'color' => 'yellow'],
+            ['label' => 'En cours', 'value' => $en_cours ?? 0, 'icon' => 'fa-spinner', 'color' => 'indigo'],
+            ['label' => 'Résolues', 'value' => $resolues ?? 0, 'icon' => 'fa-circle-check', 'color' => 'green'],
+            ['label' => 'Interventions', 'value' => $interventions ?? 0, 'icon' => 'fa-screwdriver-wrench', 'color' => 'purple'],
+        ] as $card)
+        <div class="bg-white rounded-2xl shadow p-5 border-l-4 border-{{ $card['color'] }}-500">
+            <p class="text-sm text-gray-500"><i class="fa-solid {{ $card['icon'] }} mr-1"></i>{{ $card['label'] }}</p>
+            <p class="text-3xl font-bold mt-1">{{ $card['value'] }}</p>
         </div>
         @endforeach
     </div>
 
-    <div class="grid lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 bg-white rounded-2xl shadow p-6">
-            <h2 class="text-xl font-semibold mb-4">Dernières plaintes</h2>
-            <table class="w-full">
-                <thead>
-                    <tr class="border-b">
-                        <th class="text-left py-2">#</th>
-                        <th class="text-left">Sujet</th>
-                        <th>Priorité</th>
-                        <th>Statut</th>
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="p-5 border-b flex flex-wrap justify-between items-center gap-4">
+            <h2 class="font-bold">Plaintes du service</h2>
+            <form method="GET" class="flex flex-wrap gap-2">
+                <input type="search" name="search" value="{{ request('search') }}" placeholder="Rechercher..." class="border rounded-xl px-3 py-2 text-sm">
+                <select name="statut" class="border rounded-xl px-3 py-2 text-sm">
+                    <option value="">Tous statuts</option>
+                    @foreach($statuts ?? PlainteStatut::all() as $s)
+                    <option value="{{ $s }}" @selected(request('statut')===$s)>{{ $s }}</option>
+                    @endforeach
+                </select>
+                <select name="priorite" class="border rounded-xl px-3 py-2 text-sm">
+                    <option value="">Priorité</option>
+                    @foreach(['normale','haute','urgente'] as $p)
+                    <option value="{{ $p }}" @selected(request('priorite')===$p)>{{ ucfirst($p) }}</option>
+                    @endforeach
+                </select>
+                <button class="bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm"><i class="fa-solid fa-filter"></i></button>
+            </form>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left">Réf.</th>
+                        <th class="px-4 py-3 text-left">Titre</th>
+                        <th class="px-4 py-3 text-left">Citoyen</th>
+                        <th class="px-4 py-3 text-left">Priorité</th>
+                        <th class="px-4 py-3 text-left">Statut</th>
+                        <th class="px-4 py-3 text-left">Agent</th>
+                        <th class="px-4 py-3 text-left">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                @for($i=1;$i<=8;$i++)
-                    <tr class="border-b">
-                        <td class="py-3">PL-00{{ $i }}</td>
-                        <td>Panne réseau secteur {{ $i }}</td>
-                        <td><span class="px-2 py-1 bg-red-100 text-red-600 rounded">Urgente</span></td>
-                        <td><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded">En cours</span></td>
+                <tbody class="divide-y">
+                    @forelse($plaintes ?? [] as $plainte)
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-4 py-3 font-mono text-indigo-700">{{ $plainte->code_suivi }}</td>
+                        <td class="px-4 py-3">{{ $plainte->title }}</td>
+                        <td class="px-4 py-3">{{ $plainte->citoyenNom() }}</td>
+                        <td class="px-4 py-3">{{ ucfirst($plainte->priorite ?? 'normale') }}</td>
+                        <td class="px-4 py-3">@include('partials.statut-badge', ['statut' => $plainte->statut])</td>
+                        <td class="px-4 py-3">{{ $plainte->agent?->name ?? '—' }}</td>
+                        <td class="px-4 py-3">
+                            <div class="flex gap-2 flex-wrap">
+                                <a href="{{ route('complaints.show', $plainte) }}" class="text-indigo-600 hover:underline"><i class="fa-solid fa-eye"></i></a>
+                                <button type="button" onclick="openAssignModal({{ $plainte->id }})" class="text-green-600 hover:underline"><i class="fa-solid fa-user-plus"></i></button>
+                                <button type="button" onclick="openStatusModal({{ $plainte->id }}, '{{ $plainte->statut }}', '{{ $plainte->priorite }}')" class="text-amber-600 hover:underline"><i class="fa-solid fa-arrows-rotate"></i></button>
+                                <form method="POST" action="{{ route('complaints.destroy', $plainte) }}" onsubmit="return confirm('Supprimer cette plainte ?')">
+                                    @csrf @method('DELETE')
+                                    <button class="text-red-600 hover:underline"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
-                @endfor
+                    @empty
+                    <tr><td colspan="7" class="py-12 text-center text-gray-500">Aucune plainte pour ce service</td></tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-
-        <div class="bg-white rounded-2xl shadow p-6">
-            <h2 class="text-xl font-semibold mb-4">Rapports récents</h2>
-            @for($i=1;$i<=6;$i++)
-            <div class="border-b py-3">
-                <p class="font-semibold">Agent {{ $i }}</p>
-                <p class="text-gray-500 text-sm">Rapport intervention envoyé.</p>
-            </div>
-            @endfor
-        </div>
+        @if(isset($plaintes) && method_exists($plaintes, 'hasPages') && $plaintes->hasPages())
+        <div class="p-4 border-t">{{ $plaintes->links() }}</div>
+        @endif
     </div>
+
+    @include('partials.modals-responsable')
+    @else
+    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-8 text-center">
+        <i class="fa-solid fa-triangle-exclamation text-3xl text-amber-600 mb-3"></i>
+        <p class="text-amber-800 font-medium">Aucun service ne vous est assigné. Contactez l'administrateur.</p>
+    </div>
+    @endif
 </div>
 @endsection

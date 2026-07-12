@@ -10,7 +10,7 @@
             <p class="mt-2 text-gray-600">Accédez à votre espace pour gérer vos plaintes</p>
         </div>
         
-        <form class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg" method="POST" action="{{ route('auth.login') }}">
+        <form class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg" method="POST" action="{{ route('auth.sign') }}">
             @csrf
             
             @if ($errors->any())
@@ -54,7 +54,7 @@
                     </div>
                     
                     <div class="text-sm">
-                        <a href="{{ route('password.request') }}" class="font-medium text-royal-blue-600 hover:text-royal-blue-500">
+                        <a href="{{ route('auth.password.request') }}" class="font-medium text-royal-blue-600 hover:text-royal-blue-500">
                             Mot de passe oublié ?
                         </a>
                     </div>

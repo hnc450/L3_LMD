@@ -1,37 +1,33 @@
 @extends('base.base')
-@section('title','Réinitialiser le mot de passe')
+
+@section('title', 'Mot de passe oublié')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
-    <div class="container mx-auto px-6">
-        <div class="mb-10 text-center">
-            <h1 class="text-3xl font-extrabold text-royal-blue-700">Réinitialiser le mot de passe</h1>
-            <p class="text-gray-600 mt-3">Entrez votre adresse email pour recevoir un lien de réinitialisation</p>
+<div class="min-h-[calc(100vh-200px)] flex items-center justify-center py-12 px-4">
+    <div class="max-w-md w-full">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-blue-800">Mot de passe oublié</h2>
+            <p class="mt-2 text-gray-600">Entrez votre e-mail pour recevoir un lien de réinitialisation</p>
         </div>
 
-        <div class="bg-white rounded-xl shadow-xl p-8 max-w-md mx-auto border border-gray-200">
-            <form method="POST" action="{{ '#' }}" class="space-y-6">
-                @csrf
+        <form method="POST" action="{{ route('auth.password.email') }}" class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
+            @csrf
+            @include('layouts.alerts')
 
-                <!-- Champ Email -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Adresse email</label>
-                    <input type="email" name="email" value="{{ old('email') }}" 
-                        placeholder="ex: utilisateur@exemple.com"
-                        required
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500 transition" />
-                    @error('email') 
-                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p> 
-                    @enderror
-                </div>
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Adresse e-mail</label>
+                <input id="email" name="email" type="email" required value="{{ old('email') }}"
+                       class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500">
+            </div>
 
-                <!-- Bouton -->
-                <button type="submit" 
-                        class="w-full bg-royal-blue-600 text-white py-3 rounded-lg font-semibold shadow hover:bg-royal-blue-700 transition-colors">
-                    📧 Envoyer le lien de réinitialisation
-                </button>
-            </form>
-        </div>
+            <button type="submit" class="w-full bg-blue-700 text-white py-3 rounded-xl font-semibold hover:bg-blue-800">
+                Envoyer le lien
+            </button>
+
+            <p class="text-center text-sm">
+                <a href="{{ route('auth.login') }}" class="text-blue-600 hover:underline">Retour à la connexion</a>
+            </p>
+        </form>
     </div>
 </div>
 @endsection

@@ -124,7 +124,7 @@
                         </h2>
                     </div>
 
-                    <form action="{{ route('users.update',$user->id) }}"
+                    <form action="{{ route('admin.users.update',$user->id) }}"
                           method="POST"
                           class="p-8">
 
@@ -189,6 +189,25 @@
                                     value="{{ $user->created_at->format('d/m/Y H:i') }}"
                                     class="w-full rounded-xl border bg-gray-100 px-4 py-3">
 
+                            </div>
+
+                            <div>
+
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Rôle
+                                </label>
+
+                                <select name="role_id" class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500">
+                         
+
+                                @forelse($roles as $role)
+                                    <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                                        {{ $role->name }}
+                                    </option>
+                                @empty
+                                    <option value="">Aucun rôle trouvé</option>
+                                @endforelse
+                                </select>
                             </div>
 
                         </div>

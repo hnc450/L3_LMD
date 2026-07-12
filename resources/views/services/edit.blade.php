@@ -13,7 +13,7 @@
 
         <!-- Form Card -->
         <div class="bg-white rounded-xl shadow-xl p-8 max-w-2xl mx-auto border border-gray-200">
-            <form method="POST" action="{{ route('services.update', $service->id ?? 0) }}" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('admin.services.update', $service->id ?? 0) }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @method('PUT')
 
@@ -68,7 +68,7 @@
 
                 <!-- Boutons -->
                 <div class="flex gap-4">
-                    <a href="{{ route('services.index') }}" 
+                    <a href="{{ route('admin.services.index') }}" 
                        class="flex-1 text-center bg-gray-200 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors">
                         Annuler
                     </a>

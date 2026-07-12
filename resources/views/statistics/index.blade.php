@@ -1,4 +1,4 @@
-@extends('base.admin')
+@extends(auth()->user()?->isResponsable() ? 'base.responsable' : 'base.admin')
 
 @section('title', 'Statistiques - Plateforme de Plaintes')
 
@@ -7,7 +7,13 @@
     <div class="container mx-auto px-4">
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-royal-blue-700">Statistiques</h1>
-            <p class="text-gray-600 mt-2">Analyse des performances et tendances des plaintes</p>
+            <p class="text-gray-600 mt-2">
+                @if(isset($serviceFilter) && $serviceFilter)
+                    Analyse du service : <strong>{{ $serviceFilter->name }}</strong>
+                @else
+                    Analyse des performances et tendances des plaintes
+                @endif
+            </p>
         </div>
         
         <!-- Period Filter -->

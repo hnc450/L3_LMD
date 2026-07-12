@@ -116,7 +116,7 @@
                     </div>
 
                     <form
-                        action="{{ route('user.profile.update',['id' => auth()->id()]) }}"
+                        action="{{ route('user.profile.update') }}"
                         method="POST"
                         class="p-8">
 

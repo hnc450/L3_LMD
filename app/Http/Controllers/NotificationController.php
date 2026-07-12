@@ -2,63 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Notification::with('plainte')
+            ->where('id_user', Auth::id())
+            ->latest();
+
+        if ($request->filter === 'unread') {
+            $query->where('status', 'sent');
+        } elseif ($request->filter === 'read') {
+            $query->where('status', 'read');
+        }
+
+        $notifications = $query->paginate(20)->withQueryString();
+
+        return view('notifications.index', compact('notifications'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function markRead(Notification $notification)
     {
-        //
+        if ($notification->id_user !== Auth::id()) {
+            abort(403);
+        }
+
+        $notification->update(['status' => 'read']);
+
+        return back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function markAllRead()
     {
-        //
-    }
+        Notification::where('id_user', Auth::id())
+            ->where('status', 'sent')
+            ->update(['status' => 'read']);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return back()->with('success', 'Toutes les notifications ont été marquées comme lues.');
     }
 }
