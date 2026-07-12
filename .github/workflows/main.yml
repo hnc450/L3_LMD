@@ -1,0 +1,38 @@
+name: Plaintes-app-deploy
+on:
+  push: 
+    branches:
+      - main
+permissions: 
+  contents: write
+jobs:
+  deploy:
+    name: run-on-machine
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: chekout-repository-code-in-vm
+        uses: actions/checkout@v4
+
+      - name: ssh-deployement
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.IP }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          script: |
+            cd /home/${{ secrets.USER }}/Desktop/
+            rm -rf plaintes-app.duckdns.org
+            git clone https://github.com/hnc450/L3_LMD.git plaintes-app.duckdns.org
+            cd plaintes-app.duckdns.org
+            composer install --no-dev
+            cp .env.example .env
+            php artisan key:generate 
+            rm -rf .git
+            rm -rf .github
+            cd ..
+            echo ${{ secrets.PASSWORD }} | sudo -S rm -rf /var/www/plaintes-app.duckdns.org/
+            echo ${{ secrets.PASSWORD }} | sudo -S mv plaintes-app.duckdns.org /var/www/
+            echo ${{ secrets.PASSWORD }} |  sudo -S chown -R www-data:www-data /var/www/plaintes-app.duckdns.org
+           
