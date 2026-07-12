@@ -29,6 +29,7 @@ jobs:
             composer install --no-dev
             cp .env.example .env
             php artisan key:generate 
+            php artisan migrate 
             rm -rf .git
             rm -rf .github
             cd ..
