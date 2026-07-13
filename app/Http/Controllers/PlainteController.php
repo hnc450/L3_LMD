@@ -51,14 +51,32 @@ class PlainteController extends Controller
 
     public function create(Request $request)
     {
+        $services = Service::all();
+
+        if ($services->isEmpty()) {
+            return redirect()->route('index')
+                ->with('error', 'Aucun service disponible. Veuillez contacter l\'administration.');
+        }
+
         return view('complaints.create', [
-            'services' => Service::all(),
+            'services' => $services,
             'serviceId' => $request->query('service'),
         ]);
     }
 
     public function store(PlainteRequest $request)
     {
+        if (! Auth::check()) {
+            return redirect()->route('auth.login')
+                ->with('error', 'Vous devez être connecté pour soumettre une plainte.');
+        }
+
+        $services = Service::all();
+        if ($services->isEmpty()) {
+            return redirect()->route('index')
+                ->with('error', 'Aucun service disponible. Veuillez contacter l\'administration.');
+        }
+
         $data = $request->validated();
         $data['code_suivi'] = Plainte::generateCodeSuivi();
         $data['id_user'] = Auth::id();

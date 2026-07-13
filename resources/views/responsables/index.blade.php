@@ -10,12 +10,15 @@
             <h1 class="text-2xl font-bold text-gray-800">Tableau de bord — Responsable</h1>
             <p class="text-gray-500">{{ $service?->name ?? 'Aucun service assigné' }}</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex gap-3 flex-wrap">
             <a href="{{ route('responsable.agents.create') }}" class="bg-indigo-700 text-white px-5 py-3 rounded-xl font-medium hover:bg-indigo-800">
                 <i class="fa-solid fa-user-plus mr-2"></i>Ajouter un agent
             </a>
             <a href="{{ route('responsable.agents') }}" class="border border-indigo-700 text-indigo-700 px-5 py-3 rounded-xl font-medium hover:bg-indigo-50">
                 <i class="fa-solid fa-users mr-2"></i>Mes agents
+            </a>
+            <a href="{{ route('responsable.rapports') }}" class="border border-indigo-700 text-indigo-700 px-5 py-3 rounded-xl font-medium hover:bg-indigo-50">
+                <i class="fa-solid fa-file-lines mr-2"></i>Rapports
             </a>
         </div>
     </div>

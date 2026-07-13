@@ -38,7 +38,13 @@
 @forelse($services as $service)
 <tr class="hover:bg-blue-50 transition">
 <td class="px-6 py-4">
-<img src="{{ $service->image ? asset('storage/'.$service->image) : asset('images/no-image.png') }}" class="w-14 h-14 rounded-xl object-cover">
+@if($service->image)
+<img src="{{ asset('storage/'.$service->image) }}" class="w-14 h-14 rounded-xl object-cover">
+@else
+<div class="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center">
+<i class="fa-solid fa-building-columns text-blue-700 text-xl"></i>
+</div>
+@endif
 </td>
 <td class="px-6 py-4 font-semibold">{{ $service->name }}</td>
 <td class="px-6 py-4">{{ $service->responsable->name ?? 'Non affecté' }}</td>

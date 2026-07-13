@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use App\Models\Rapport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,5 +44,21 @@ class NotificationController extends Controller
             ->update(['status' => 'read']);
 
         return back()->with('success', 'Toutes les notifications ont été marquées comme lues.');
+    }
+
+    public function getUnreadCount()
+    {
+        $count = Notification::where('id_user', Auth::id())
+            ->where('status', 'sent')
+            ->count();
+
+        if (Auth::user()->isResponsable()) {
+            $rapportCount = Rapport::where('responsable_id', Auth::id())
+                ->where('is_read', false)
+                ->count();
+            $count += $rapportCount;
+        }
+
+        return $count;
     }
 }

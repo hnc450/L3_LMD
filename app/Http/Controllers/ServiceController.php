@@ -47,6 +47,8 @@ class ServiceController extends Controller
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('services', 'public');
+        } else {
+            $data['image'] = null;
         }
 
         Service::create($data);

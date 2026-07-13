@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Plainte;
 use App\Models\Reponse;
+use App\Models\Rapport;
 use App\Models\Service;
 use App\Models\User;
 use App\Services\ActivityLogger;
@@ -14,6 +15,7 @@ use App\Support\PlainteStatut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class ResponsableController extends Controller
@@ -152,6 +154,10 @@ class ResponsableController extends Controller
             ->where('id_service', $service->id)
             ->firstOrFail();
 
+        if ($plainte->agent_id) {
+            return back()->with('error', 'Cette plainte est déjà affectée à un agent.');
+        }
+
         $agent = User::where('id', $request->agent_id)
             ->where('id_service', $service->id)
             ->where('created_by', Auth::id())
@@ -230,5 +236,52 @@ class ResponsableController extends Controller
             ->where('created_by', Auth::id())
             ->whereHas('role', fn ($q) => $q->where('name', 'agent'))
             ->get();
+    }
+
+    public function rapports()
+    {
+        $service = $this->serviceOrAbort();
+
+        $rapports = Rapport::with(['agent', 'service'])
+            ->where('responsable_id', Auth::id())
+            ->where('service_id', $service->id)
+            ->latest()
+            ->paginate(15);
+
+        $unreadCount = Rapport::where('responsable_id', Auth::id())
+            ->where('service_id', $service->id)
+            ->where('is_read', false)
+            ->count();
+
+        return view('responsables.rapports', [
+            'service' => $service,
+            'rapports' => $rapports,
+            'unreadCount' => $unreadCount,
+        ]);
+    }
+
+    public function showRapport(Rapport $rapport)
+    {
+        $service = $this->serviceOrAbort();
+
+        abort_unless($rapport->responsable_id === Auth::id() && $rapport->service_id === $service->id, 403);
+
+        $rapport->load(['agent', 'service']);
+
+        return view('responsables.rapport-show', [
+            'service' => $service,
+            'rapport' => $rapport,
+        ]);
+    }
+
+    public function markRapportRead(Rapport $rapport)
+    {
+        $service = $this->serviceOrAbort();
+
+        abort_unless($rapport->responsable_id === Auth::id() && $rapport->service_id === $service->id, 403);
+
+        $rapport->update(['is_read' => true]);
+
+        return back()->with('success', 'Rapport marqué comme lu.');
     }
 }

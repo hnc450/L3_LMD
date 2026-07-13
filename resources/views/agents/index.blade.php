@@ -4,9 +4,14 @@
 
 @section('content')
 <div class="space-y-6">
-    <div>
-        <h1 class="text-2xl font-bold text-gray-800">Mes plaintes assignées</h1>
-        <p class="text-gray-500">Répondez aux citoyens et mettez à jour les statuts</p>
+    <div class="flex flex-wrap justify-between items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Mes plaintes assignées</h1>
+            <p class="text-gray-500">Répondez aux citoyens et mettez à jour les statuts</p>
+        </div>
+        <a href="{{ route('agent.rapport.create') }}" class="bg-blue-700 text-white px-5 py-3 rounded-xl font-medium hover:bg-blue-800">
+            <i class="fa-solid fa-file-lines mr-2"></i>Soumettre un rapport
+        </a>
     </div>
 
     <div class="grid md:grid-cols-4 gap-4">

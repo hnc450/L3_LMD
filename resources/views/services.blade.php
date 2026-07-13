@@ -60,9 +60,13 @@
 <div class="h-2 bg-gradient-to-r from-blue-600 to-cyan-500"></div>
 <div class="p-8">
 <div class="flex items-center justify-between">
+@if($service->image)
+<img src="{{ asset('storage/'.$service->image) }}" class="h-16 w-16 rounded-2xl object-cover">
+@else
 <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100">
 <i class="fa-solid fa-building-columns text-3xl text-blue-700"></i>
 </div>
+@endif
 <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">Disponible</span>
 </div>
 <h3 class="mt-6 text-2xl font-bold text-slate-800">{{ $service->name }}</h3>

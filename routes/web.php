@@ -85,6 +85,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
 Route::prefix('agents')->middleware(['auth', 'role:agent'])->name('agent.')->group(function () {
     Route::get('/', [AgentController::class, 'index'])->name('index');
     Route::post('/respond', [AgentController::class, 'respond'])->name('respond');
+    Route::get('/rapport/create', [AgentController::class, 'createRapport'])->name('rapport.create');
+    Route::post('/rapport/store', [AgentController::class, 'storeRapport'])->name('rapport.store');
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
 });
 
@@ -95,12 +97,16 @@ Route::prefix('responsables')->middleware(['auth', 'role:responsable'])->name('r
     Route::get('/agents', [ResponsableController::class, 'agents'])->name('agents');
     Route::get('/agents/create', [ResponsableController::class, 'createAgent'])->name('agents.create');
     Route::post('/agents/store', [ResponsableController::class, 'storeAgent'])->name('agents.store');
+    Route::get('/rapports', [ResponsableController::class, 'rapports'])->name('rapports');
+    Route::get('/rapports/{rapport}', [ResponsableController::class, 'showRapport'])->name('rapports.show');
+    Route::patch('/rapports/{rapport}/read', [ResponsableController::class, 'markRapportRead'])->name('rapports.read');
     Route::get('/statistics', [StatistiqueController::class, 'index'])->name('statistics');
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
     Route::post('/notifications/mark-read', [NotificationController::class, 'markAllRead'])->name('notifications.mark-read');
     Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read')->whereNumber('notification');
     Route::get('/feedback/{plainte}', [FeedbackController::class, 'create'])->name('feedback.create')->whereNumber('plainte');

@@ -3,46 +3,40 @@
 @section('title', 'Soumettre une plainte - Plateforme de Plaintes')
 
 @section('content')
-<div class="min-h-[calc(100vh-200px)] py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-[calc(100vh-200px)] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold text-royal-blue-700">Soumettre une plainte</h2>
-            <p class="mt-2 text-gray-600">Décrivez votre problème concernant un service public</p>
+        <div class="text-center mb-6 sm:mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-royal-blue-700">Soumettre une plainte</h2>
+            <p class="mt-2 text-gray-600 text-sm sm:text-base">Décrivez votre problème concernant un service public</p>
         </div>
         
-        <form class="bg-white p-8 rounded-lg shadow-lg space-y-6" method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data">
-            @csrf
-            
-            @if ($errors->any())
-                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                    <ul class="list-disc list-inside">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+        @guest
+            <div class="bg-yellow-50 border border-yellow-200 p-6 sm:p-8 rounded-lg text-center">
+                <i class="fa-solid fa-lock text-3xl sm:text-4xl text-yellow-600 mb-4"></i>
+                <h3 class="text-lg sm:text-xl font-semibold text-yellow-800 mb-2">Connexion requise</h3>
+                <p class="text-gray-600 mb-6 text-sm sm:text-base">Vous devez être connecté pour soumettre une plainte.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="{{ route('auth.login') }}" class="px-6 py-3 bg-royal-blue-600 text-white rounded-lg hover:bg-royal-blue-700 transition">
+                        Se connecter
+                    </a>
+                    <a href="{{ route('auth.register') }}" class="px-6 py-3 border border-royal-blue-600 text-royal-blue-600 rounded-lg hover:bg-royal-blue-50 transition">
+                        Créer un compte
+                    </a>
                 </div>
-            @endif
-            
-            @guest
-                <div class="bg-royal-blue-50 border border-royal-blue-200 p-4 rounded-lg mb-6">
-                    <h3 class="font-semibold text-royal-blue-700 mb-2">Informations de contact (sans compte)</h3>
-                    <p class="text-sm text-gray-600 mb-4">Vous n'êtes pas connecté. Veuillez fournir vos coordonnées pour suivre votre plainte.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
-                            <input id="nom" name="nom" type="text" required 
-                                class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500"
-                                placeholder="Votre nom" value="{{ old('nom') }}">
-                        </div>
-                        <div>
-                            <label for="contact" class="block text-sm font-medium text-gray-700 mb-1">Contact (Email ou Téléphone)</label>
-                            <input id="contact" name="contact" type="text" required 
-                                class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-royal-blue-500 focus:border-royal-blue-500"
-                                placeholder="votre@email.com ou +221 77 123 45 67" value="{{ old('contact') }}">
-                        </div>
+            </div>
+        @else
+            <form class="bg-white p-6 sm:p-8 rounded-lg shadow-lg space-y-6" method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data">
+                @csrf
+                
+                @if ($errors->any())
+                    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                </div>
-            @endguest
+                @endif
             
             <div class="space-y-4">
                 <div>
@@ -109,17 +103,18 @@
                 </label>
             </div>
             
-            <div class="flex gap-4">
-                <button type="submit" 
-                    class="flex-1 py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-royal-blue-600 hover:bg-royal-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-royal-blue-500 transition-colors">
-                    Soumettre la plainte
-                </button>
-                <a href="{{ route('index') }}" 
-                    class="flex-1 py-3 px-4 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-royal-blue-500 transition-colors text-center">
-                    Annuler
-                </a>
-            </div>
-        </form>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button type="submit" 
+                        class="flex-1 py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-royal-blue-600 hover:bg-royal-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-royal-blue-500 transition-colors">
+                        Soumettre la plainte
+                    </button>
+                    <a href="{{ route('index') }}" 
+                        class="flex-1 py-3 px-4 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-royal-blue-500 transition-colors text-center">
+                        Annuler
+                    </a>
+                </div>
+            </form>
+        @endguest
     </div>
 </div>
 @endsection
