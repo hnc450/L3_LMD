@@ -22,12 +22,12 @@ Route::name('public.')->group(function () {
     Route::post('/suivi', [PlainteController::class, 'track'])->name('track');
 });
 
-Route::prefix('auth')->name('auth.')->group(function () {
+Route::prefix('auth')->name('auth.')->controller(AuthController::class)->group(function () {
     Route::middleware('guest')->group(function () {
-        Route::get('/login', [AuthController::class, 'index'])->name('login');
-        Route::post('/login', [AuthController::class, 'login'])->name('sign');
-        Route::get('/register', [AuthController::class, 'register'])->name('register');
-        Route::post('/register', [AuthController::class, 'sign'])->name('signup');
+        Route::get('/login', 'index')->name('login');
+        Route::post('/login', 'login')->name('sign');
+        Route::get('/register', 'register')->name('register');
+        Route::post('/register', 'sign')->name('signup');
         Route::get('/reset-password', [AuthController::class, 'showResetForm'])->name('password.request');
         Route::post('/reset-password', [AuthController::class, 'sendResetLink'])->name('password.email');
     });

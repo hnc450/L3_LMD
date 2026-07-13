@@ -22,29 +22,29 @@
 <section class="-mt-12 relative z-10">
 <div class="container mx-auto px-6">
 <div class="grid gap-6 md:grid-cols-3">
-<div class="rounded-3xl bg-white p-8 text-center shadow-xl"><div class="text-4xl font-bold text-blue-700">8</div><p class="mt-2 text-gray-500">Services disponibles</p></div>
-<div class="rounded-3xl bg-white p-8 text-center shadow-xl"><div class="text-4xl font-bold text-blue-700">24/7</div><p class="mt-2 text-gray-500">Plateforme disponible</p></div>
-<div class="rounded-3xl bg-white p-8 text-center shadow-xl"><div class="text-4xl font-bold text-blue-700">100%</div><p class="mt-2 text-gray-500">Suivi en ligne</p></div>
+<div class="rounded-3xl bg-white p-8 text-center shadow-xl"><div class="text-4xl font-bold text-blue-700">{{ $totals }}</div>
+  <p class="mt-2 text-gray-500">Services disponibles</p></div>
+<div class="rounded-3xl bg-white p-8 text-center shadow-xl"><div class="text-4xl font-bold text-blue-700">24/7</div>
+  <p class="mt-2 text-gray-500">Plateforme disponible</p></div>
+<div class="rounded-3xl bg-white p-8 text-center shadow-xl"><div class="text-4xl font-bold text-blue-700">100%</div>
+  <p class="mt-2 text-gray-500">Suivi en ligne</p></div>
 </div>
 </div>
 </section>
 
 @guest
-<section class="py-12">
-<div class="container mx-auto px-6">'''
-path=Path('/mnt/data/services-index-improved.blade.php')
-path.write_text(content,encoding='utf-8')
-print(path)
+ <section class="py-12">
+  <div class="container mx-auto px-6">
 
-<div class="flex flex-col items-center justify-between gap-6 rounded-3xl border border-yellow-200 bg-yellow-50 p-8 md:flex-row">
-<div>
-<h3 class="text-xl font-bold text-yellow-800">Connectez-vous</h3>
-<p class="mt-2 text-yellow-700">Créez un compte ou connectez-vous pour déposer une plainte, consulter son évolution et recevoir des notifications.</p>
-</div>
-<a href="{{ route('auth.login') }}" class="rounded-2xl bg-blue-600 px-8 py-3 font-semibold text-white transition hover:scale-105 hover:bg-blue-700">Se connecter</a>
-</div>
-</div>
-</section>
+   <div class="flex flex-col items-center justify-between gap-6 rounded-3xl border border-yellow-200 bg-yellow-50 p-8 md:flex-row">
+  <div>
+    <h3 class="text-xl font-bold text-yellow-800">Connectez-vous</h3>
+    <p class="mt-2 text-yellow-700">Créez un compte ou connectez-vous pour déposer une plainte, consulter son évolution et recevoir des notifications.</p>
+    </div>
+    <a href="{{ route('auth.login') }}" class="rounded-2xl bg-blue-600 px-8 py-3 font-semibold text-white transition hover:scale-105 hover:bg-blue-700">Se connecter</a>
+    </div>
+   </div>
+ </section>
 @endguest
 
 <section class="pb-24">

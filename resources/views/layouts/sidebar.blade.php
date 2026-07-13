@@ -43,6 +43,7 @@
                     ['route'=>'admin.roles.index','icon'=>'fa-user-shield','label'=>'Rôles'],
                     ['route'=>'admin.statistics','icon'=>'fa-chart-bar','label'=>'Statistiques'],
                     ['route'=>'admin.logs','icon'=>'fa-clock-rotate-left','label'=>'Logs'],
+                    ['route'=>'notifications.index','icon'=>'fa-bell','label'=>'Notifications'],
                 ];
             @endphp
 
@@ -89,6 +90,7 @@
                 ['route'=>'responsable.agents','icon'=>'fa-user-tie','label'=>'Mes agents'],
                 ['route'=>'responsable.statistics','icon'=>'fa-chart-bar','label'=>'Statistiques'],
                 ['route'=>'responsable.logs','icon'=>'fa-clock-rotate-left','label'=>'Mes logs'],
+                ['route'=>'notifications.index','icon'=>'fa-bell','label'=>'Notifications'],
             ] as $menu)
             <a href="{{ route($menu['route']) }}"
                class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition {{ request()->routeIs($menu['route'].'*') ? 'bg-white/20' : '' }}">

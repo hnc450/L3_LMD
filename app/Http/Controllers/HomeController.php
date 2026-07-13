@@ -42,7 +42,7 @@ class HomeController extends Controller
     public function services()
     {
         $services = Service::with('responsable')->withCount('plaintes')->paginate(6);
-
-        return view('services', compact('services'));
+        $totals = Service::with('responsable')->count();
+        return view('services', compact('services', 'totals'));
     }
 }

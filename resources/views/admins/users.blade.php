@@ -202,6 +202,11 @@
                     <select class="px-5 py-3 rounded-xl border">
 
                         <option>Tous les rôles</option>
+                        @forelse($roles as $role)
+                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                        @empty
+                            <option>Aucun rôle trouvé</option>
+                        @endforelse
 
                     </select>
 

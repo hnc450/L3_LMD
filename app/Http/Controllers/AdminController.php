@@ -6,6 +6,7 @@ use App\Models\Plainte;
 use App\Models\Service;
 use App\Models\User;
 use App\Services\ActivityLogger;
+use App\Models\Role;
 use App\Support\PlainteStatut;
 use Illuminate\Http\Request;
 
@@ -51,6 +52,7 @@ class AdminController extends Controller
     public function users()
     {
         $users = User::with('role')->paginate(10);
+        $roles = Role::all();
 
         return view('admins.users', [
             'users' => $users,
@@ -58,6 +60,7 @@ class AdminController extends Controller
             'adminCount' => User::whereHas('role', fn ($q) => $q->where('name', 'admin'))->count(),
             'responsablesCount' => User::whereHas('role', fn ($q) => $q->where('name', 'responsable'))->count(),
             'citoyensCount' => User::whereHas('role', fn ($q) => $q->where('name', 'citoyen'))->count(),
+            'roles' => $roles,
         ]);
     }
 
