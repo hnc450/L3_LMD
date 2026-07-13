@@ -27,8 +27,6 @@ jobs:
             git clone https://github.com/hnc450/L3_LMD.git plaintes-app.duckdns.org
             cd plaintes-app.duckdns.org
             composer install --no-dev
-            npm install
-            npm run build
             cp .env.example .env
             php artisan key:generate 
             php artisan migrate 
