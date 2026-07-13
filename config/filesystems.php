@@ -40,7 +40,7 @@ return [
 
         'rapports' => [
             'driver' => 'local',
-            'root' => storage_path('app/rapports'),
+            'root' => storage_path('app/private/rapports'),
             'serve' => false,
             'throw' => false,
             'report' => false,

@@ -34,23 +34,36 @@ Route::prefix('auth')->name('auth.')->controller(AuthController::class)->group(f
     Route::middleware('auth')->delete('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
+// Email verification routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])->name('verification.verify')->middleware(['signed']);
+    Route::post('/email/verification-notification', [AuthController::class, 'resendVerificationEmail'])->name('verification.resend');
+});
+
+// Password reset routes
+Route::middleware('guest')->group(function () {
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetFormWithToken'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+});
+
 Route::prefix('complaints')->name('complaints.')->group(function () {
     Route::get('/create', [PlainteController::class, 'create'])->name('create');
     Route::post('/store', [PlainteController::class, 'store'])->name('store');
     Route::get('/{plainte}', [PlainteController::class, 'show'])->name('show')->whereNumber('plainte');
 
-    Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
         Route::get('/', [PlainteController::class, 'index'])->name('index');
         Route::get('/{plainte}/edit', [PlainteController::class, 'edit'])->name('edit')->whereNumber('plainte');
         Route::put('/{plainte}/update', [PlainteController::class, 'update'])->name('update')->whereNumber('plainte');
     });
 
-    Route::middleware(['auth', 'role:responsable'])->group(function () {
+    Route::middleware(['auth', 'verified', 'role:responsable'])->group(function () {
         Route::delete('/{plainte}/delete', [PlainteController::class, 'destroy'])->name('destroy')->whereNumber('plainte');
     });
 });
 
-Route::prefix('users')->middleware(['auth', 'role:citoyen'])->name('user.')->group(function () {
+Route::prefix('users')->middleware(['auth', 'verified', 'role:citoyen'])->name('user.')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('dashboard');
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
@@ -60,7 +73,7 @@ Route::prefix('users')->middleware(['auth', 'role:citoyen'])->name('user.')->gro
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
 });
 
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::get('/users/create', [AdminController::class, 'create'])->name('users.create');
@@ -82,7 +95,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
 });
 
-Route::prefix('agents')->middleware(['auth', 'role:agent'])->name('agent.')->group(function () {
+Route::prefix('agents')->middleware(['auth', 'verified', 'role:agent'])->name('agent.')->group(function () {
     Route::get('/', [AgentController::class, 'index'])->name('index');
     Route::post('/respond', [AgentController::class, 'respond'])->name('respond');
     Route::get('/rapport/create', [AgentController::class, 'createRapport'])->name('rapport.create');
@@ -90,7 +103,7 @@ Route::prefix('agents')->middleware(['auth', 'role:agent'])->name('agent.')->gro
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
 });
 
-Route::prefix('responsables')->middleware(['auth', 'role:responsable'])->name('responsable.')->group(function () {
+Route::prefix('responsables')->middleware(['auth', 'verified', 'role:responsable'])->name('responsable.')->group(function () {
     Route::get('/', [ResponsableController::class, 'index'])->name('index');
     Route::post('/complaints/assign', [ResponsableController::class, 'assign'])->name('assign');
     Route::post('/complaints/status', [ResponsableController::class, 'updateStatus'])->name('update-status');
@@ -104,7 +117,7 @@ Route::prefix('responsables')->middleware(['auth', 'role:responsable'])->name('r
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
     Route::post('/notifications/mark-read', [NotificationController::class, 'markAllRead'])->name('notifications.mark-read');

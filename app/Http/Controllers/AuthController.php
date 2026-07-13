@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -62,8 +63,11 @@ class AuthController extends Controller
         Auth::login($user);
         ActivityLogger::log('create', 'Inscription citoyen', $user->id);
 
-        return redirect()->route('user.dashboard')
-            ->with('success', 'Compte créé avec succès');
+        // Send email verification
+        $user->sendEmailVerificationNotification();
+
+        return redirect()->route('verification.notice')
+            ->with('success', 'Compte créé avec succès. Veuillez vérifier votre email.');
     }
 
     public function logout(Request $request)
@@ -91,5 +95,64 @@ class AuthController extends Controller
         return $status === Password::RESET_LINK_SENT
             ? back()->with('success', 'Un lien de réinitialisation a été envoyé à votre adresse e-mail.')
             : back()->withErrors(['email' => 'Aucun compte associé à cette adresse.']);
+    }
+
+    public function showVerificationNotice()
+    {
+        return view('auth.verify');
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $user = User::find($request->route('id'));
+
+        if (!hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
+            return redirect()->route('verification.notice')->with('error', 'Lien de vérification invalide.');
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route(auth()->user()->dashboardRoute())->with('success', 'Email déjà vérifié.');
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new \Illuminate\Auth\Events\Verified($user));
+        }
+
+        return redirect()->route(auth()->user()->dashboardRoute())->with('success', 'Email vérifié avec succès.');
+    }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('resent', true);
+    }
+
+    public function showResetFormWithToken(Request $request, $token)
+    {
+        return view('password.reset-with-token', ['token' => $token, 'email' => $request->email]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset($request->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->setRememberToken(Str::random(60));
+
+            $user->save();
+
+            event(new \Illuminate\Auth\Events\PasswordReset($user));
+        });
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('auth.login')->with('success', 'Mot de passe réinitialisé avec succès.')
+            : back()->withErrors(['email' => [__($status)]]);
     }
 }

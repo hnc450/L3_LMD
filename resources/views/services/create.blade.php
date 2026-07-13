@@ -12,11 +12,11 @@
         <div class="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-white/10 blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-cyan-300/10 blur-3xl"></div>
 
-        <div class="container mx-auto px-4 sm:px-6 py-10 sm:py-14 relative">
+        <div class="container mx-auto px-6 py-14 relative">
 
             <div class="text-center text-white">
 
-                <span class="inline-flex items-center px-4 py-2 sm:px-5 sm:py-2 rounded-full bg-white/20 text-sm sm:text-base">
+                <span class="inline-flex items-center px-5 py-2 rounded-full bg-white/20">
 
                     <i class="fa-solid fa-building mr-2"></i>
 
@@ -24,13 +24,13 @@
 
                 </span>
 
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 sm:mt-5">
+                <h1 class="text-5xl font-bold mt-5">
 
                     Créer un service
 
                 </h1>
 
-                <p class="text-blue-100 mt-3 sm:mt-4 text-base sm:text-lg">
+                <p class="text-blue-100 mt-4 text-lg">
 
                     Ajoutez un nouveau service public à la plateforme.
 
@@ -42,25 +42,25 @@
 
     </section>
 
-    <div class="container mx-auto px-4 sm:px-6 -mt-8 sm:-mt-10 relative z-10">
+    <div class="container mx-auto px-6 -mt-10 relative z-10">
 
-        <div class="grid lg:grid-cols-3 gap-6 sm:gap-8">
+        <div class="grid lg:grid-cols-3 gap-8">
 
             <!-- FORMULAIRE -->
 
             <div class="lg:col-span-2">
 
-                <div class="bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden">
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
 
-                    <div class="border-b px-4 sm:px-8 py-4 sm:py-6">
+                    <div class="border-b px-8 py-6">
 
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-800">
+                        <h2 class="text-2xl font-bold text-gray-800">
 
                             Informations du service
 
                         </h2>
 
-                        <p class="text-gray-500 mt-2 text-sm sm:text-base">
+                        <p class="text-gray-500 mt-2">
 
                             Complétez les informations ci-dessous.
 
@@ -71,7 +71,7 @@
                     <form method="POST"
                           action="{{ route('admin.services.store') }}"
                           enctype="multipart/form-data"
-                          class="p-4 sm:p-8 space-y-6 sm:space-y-8">
+                          class="p-8 space-y-8">
 
                         @csrf
 
@@ -79,7 +79,7 @@
 
                         <div>
 
-                            <label class="block font-semibold text-gray-700 mb-2 sm:mb-3 text-sm sm:text-base">
+                            <label class="block font-semibold text-gray-700 mb-3">
 
                                 Nom du service
 
@@ -95,7 +95,7 @@
                                     value="{{ old('name') }}"
                                     placeholder="Ex : Voirie"
                                     required
-                                    class="w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none text-sm sm:text-base">
+                                    class="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none">
 
                             </div>
 
@@ -115,7 +115,7 @@
 
                         <div>
 
-                            <label class="block font-semibold text-gray-700 mb-2 sm:mb-3 text-sm sm:text-base">
+                            <label class="block font-semibold text-gray-700 mb-3">
 
                                 Description
 
@@ -123,13 +123,13 @@
 
                             <div class="relative">
 
-                                <i class="fa-solid fa-align-left absolute left-4 top-4 sm:top-5 text-gray-400"></i>
+                                <i class="fa-solid fa-align-left absolute left-4 top-5 text-gray-400"></i>
 
                                 <textarea
                                     name="description"
                                     rows="5"
                                     placeholder="Décrivez le service..."
-                                    class="w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none text-sm sm:text-base">{{ old('description') }}</textarea>
+                                    class="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none">{{ old('description') }}</textarea>
 
                             </div>
 
@@ -149,7 +149,7 @@
 
                         <div>
 
-                            <label class="block font-semibold text-gray-700 mb-2 sm:mb-3 text-sm sm:text-base">
+                            <label class="block font-semibold text-gray-700 mb-3">
 
                                 Responsable
 
@@ -161,7 +161,7 @@
 
                                 <select
                                     name="responsable_id"
-                                    class="w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none text-sm sm:text-base">
+                                    class="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none">
 
                                     <option value="">
 
@@ -201,24 +201,24 @@
 
                         <div>
 
-                            <label class="block font-semibold text-gray-700 mb-2 sm:mb-3 text-sm sm:text-base">
+                            <label class="block font-semibold text-gray-700 mb-3">
 
                                 Image du service (optionnel)
 
                             </label>
 
                             <label
-                                class="border-2 border-dashed border-blue-300 rounded-xl sm:rounded-2xl p-6 sm:p-10 flex flex-col items-center justify-center cursor-pointer hover:border-blue-600 transition">
+                                class="border-2 border-dashed border-blue-300 rounded-2xl p-10 flex flex-col items-center justify-center cursor-pointer hover:border-blue-600 transition">
 
-                                <i class="fa-solid fa-cloud-arrow-up text-4xl sm:text-5xl text-blue-600 mb-3 sm:mb-4"></i>
+                                <i class="fa-solid fa-cloud-arrow-up text-5xl text-blue-600 mb-4"></i>
 
-                                <span class="font-semibold text-sm sm:text-base">
+                                <span class="font-semibold">
 
                                     Cliquez pour choisir une image
 
                                 </span>
 
-                                <span class="text-xs sm:text-sm text-gray-500 mt-2">
+                                <span class="text-sm text-gray-500 mt-2">
 
                                     PNG, JPG ou JPEG (optionnel)
 
@@ -246,10 +246,10 @@
 
                         <!-- Boutons -->
 
-                        <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex gap-4">
 
                             <a href="{{ route('admin.services.index') }}"
-                               class="flex-1 flex justify-center items-center gap-3 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gray-100 hover:bg-gray-200 font-semibold transition text-sm sm:text-base">
+                               class="flex-1 flex justify-center items-center gap-3 py-4 rounded-2xl bg-gray-100 hover:bg-gray-200 font-semibold transition">
 
                                 <i class="fa-solid fa-arrow-left"></i>
 
@@ -258,7 +258,7 @@
                             </a>
 
                             <button
-                                class="flex-1 flex justify-center items-center gap-3 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-700 to-cyan-500 text-white font-semibold shadow-lg hover:scale-105 transition text-sm sm:text-base">
+                                class="flex-1 flex justify-center items-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-blue-700 to-cyan-500 text-white font-semibold shadow-lg hover:scale-105 transition">
 
                                 <i class="fa-solid fa-plus"></i>
 
@@ -276,7 +276,7 @@
 
             <!-- SIDEBAR -->
 
-            <div class="hidden lg:block">
+            <div>
 
                 <div class="bg-white rounded-3xl shadow-xl p-8">
 

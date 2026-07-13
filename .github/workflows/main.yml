@@ -27,6 +27,8 @@ jobs:
             git clone https://github.com/hnc450/L3_LMD.git plaintes-app.duckdns.org
             cd plaintes-app.duckdns.org
             composer install --no-dev
+            npm install
+            npm run build
             cp .env.example .env
             php artisan key:generate 
             php artisan migrate 
@@ -36,4 +38,3 @@ jobs:
             echo ${{ secrets.PASSWORD }} | sudo -S rm -rf /var/www/plaintes-app.duckdns.org/
             echo ${{ secrets.PASSWORD }} | sudo -S mv plaintes-app.duckdns.org /var/www/
             echo ${{ secrets.PASSWORD }} |  sudo -S chown -R www-data:www-data /var/www/plaintes-app.duckdns.org
-           

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -12,10 +12,41 @@ use Illuminate\Notifications\Notifiable;
 
 #[Fillable(['name', 'email', 'password', 'phone', 'id_role', 'id_service', 'created_by', 'api_token'])]
 #[Hidden(['password', 'remember_token', 'api_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    /**
+     * Send the email verification notification.
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new \App\Notifications\CustomVerifyEmail);
+    }
+
+    /**
+     * Get the email verification URL.
+     */
+    public function verificationUrl()
+    {
+        return \Illuminate\Support\Facades\URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $this->getKey(),
+                'hash' => sha1($this->getEmailForVerification()),
+            ]
+        );
+    }
+
+    /**
+     * Send the password reset notification.
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\CustomResetPassword($token));
+    }
 
     /**
      * Get the attributes that should be cast.
