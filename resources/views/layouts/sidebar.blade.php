@@ -43,7 +43,7 @@
                     ['route'=>'admin.roles.index','icon'=>'fa-user-shield','label'=>'Rôles'],
                     ['route'=>'admin.statistics','icon'=>'fa-chart-bar','label'=>'Statistiques'],
                     ['route'=>'admin.logs','icon'=>'fa-clock-rotate-left','label'=>'Logs'],
-                    ['route'=>'notifications.index','icon'=>'fa-bell','label'=>'Notifications'],
+                    // ['route'=>'notifications.index','icon'=>'fa-bell','label'=>'Notifications'],
                 ];
             @endphp
 

@@ -31,6 +31,10 @@ class ServiceController extends Controller
             ->whereNotIn('id', $assignedIds)
             ->get();
 
+        if($responsables->isEmpty()) {
+            return redirect()->route('admin.services.index')->with('error', 'Aucun responsable disponible pour l\'attribution du service.');
+        }
+
         return view('services.create', compact('responsables'));
     }
 
