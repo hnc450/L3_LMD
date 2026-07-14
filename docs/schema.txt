@@ -1,85 +1,124 @@
 1. Users
 
-    id_user (PK)
+    id (PK)
 
     name
 
-    email
+    email (unique)
 
     password (hashé)
 
-    phone
+    phone (nullable)
 
-    role_id (FK → Roles)
+    email_verified_at (nullable)
 
-    created_at
+    id_role (FK → Roles, default: 1)
 
+    id_service (FK → Services, nullable)
 
-2. Roles
+    created_by (FK → Users, nullable)
 
-    id_role (PK)
+    api_token (nullable)
 
-    name (citoyen, agent, admin)
-
-3. Services publics
-
-    id_service (PK)
-
-    name (ex. Eau, Électricité, Santé)
-
-    description
-
-    image (URL ou chemin fichier)
-
-    responsable_id (FK vers utilisateurs si besoin)
-
-4. Plaintes
-
-    id_plainte (PK)
-
-    id_user (FK → Utilisateurs, peut être NULL si plainte anonyme)
-
-    id_service (FK → Services publics)
-
-    title
-
-    description
-
-    piece_jointe (URL ou chemin fichier)
-
-    statut (Enregistrée, En cours, Résolue, Rejetée)
+    remember_token
 
     created_at
 
     updated_at
 
+
+2. Roles
+
+    id (PK)
+
+    name (citoyen, agent, admin, responsable)
+
+    created_at
+
+    updated_at
+
+
+3. Services
+
+    id (PK)
+
+    name
+
+    description (nullable)
+
+    image (nullable)
+
+    responsable_id (FK → Users, nullable)
+
+    created_at
+
+    updated_at
+
+
+4. Plaintes
+
+    id (PK)
+
+    code_suivi (unique, nullable)
+
+    id_user (FK → Users, nullable)
+
+    id_service (FK → Services, nullable)
+
+    agent_id (FK → Users, nullable)
+
+    title
+
+    description
+
+    piece_jointe (nullable)
+
+    contact_nom (nullable)
+
+    contact_info (nullable)
+
+    statut (Enregistrée, En cours, Résolue, Rejetée)
+
+    priorite (normale, haute, urgente)
+
+    created_at
+
+    updated_at
+
+
 5. Réponses
 
-    id_reponse (PK)
+    id (PK)
 
-    id_plainte (FK → Plaintes)
+    agent_id (FK → Users)
 
-    id_agent (FK → Utilisateurs)
+    complaint_id (FK → Plaintes)
 
     message
 
     created_at
 
+    updated_at
+
+
 6. Notifications
 
     id_notification (PK)
 
-    id_user (FK → Utilisateurs)
+    id_user (FK → Users)
 
     id_plainte (FK → Plaintes)
 
-    type_notification (email, SMS, in-app)
+    type (email, SMS, in-app)
 
     content
 
+    status (sent, read)
+
     created_at
 
-    status (sent, read)
+    updated_at
+
 
 7. Feedback
 
@@ -87,34 +126,80 @@
 
     id_plainte (FK → Plaintes)
 
-    id_user (FK → Utilisateurs)
+    id_user (FK → Users)
 
-    note (1–5)
+    note (1-5)
 
-    comment
-
-    created_at
-
-8. Logs et traçabilité
-
-    id_log (PK)
-
-    id_user (FK → Utilisateurs)
-
-    action (création plainte, mise à jour statut, suppression, etc.)
+    comment (nullable)
 
     created_at
 
-    details
+    updated_at
+
+
+8. Logs
+
+    id (PK)
+
+    user_id (FK → Users)
+
+    ip_address
+
+    action
+
+    details (nullable)
+
+    created_at
+
+    updated_at
+
 
 9. Statistiques
 
     id_stat (PK)
 
-    id_service (FK → Services publics)
+    id_service (FK → Services)
 
     nombre_plaintes
 
-    temps_moyen_resolution
+    temps_moyen_resolution (nullable)
 
-    taux_satisfaction
+    taux_satisfaction (nullable)
+
+    created_at
+
+    updated_at
+
+
+10. Rapports
+
+    id (PK)
+
+    agent_id (FK → Users)
+
+    service_id (FK → Services)
+
+    responsable_id (FK → Users)
+
+    title
+
+    content
+
+    file_attachment (nullable)
+
+    is_read (default: false)
+
+    created_at
+
+    updated_at
+
+
+11. Tables système Laravel
+
+    password_reset_tokens
+
+    sessions
+
+    cache
+
+    jobs

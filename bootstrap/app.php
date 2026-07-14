@@ -17,6 +17,17 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\EnsureRole::class,
             'api.token' => \App\Http\Middleware\ApiTokenAuth::class,
         ]);
+
+        $middleware->redirectGuestsTo(function (Request $request) {
+            return route('auth.login');
+        });
+
+        $middleware->redirectUsersTo(function (Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json(['error' => 'Already authenticated'], 401);
+            }
+            return route(auth()->user()->dashboardRoute());
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -16,6 +16,12 @@
     <div class="flex min-h-screen">
         @include('layouts.sidebar')
         <div class="flex-1 flex flex-col min-w-0">
+            <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between lg:hidden">
+                <a href="{{ route('index') }}" class="font-bold text-blue-700">Plateforme</a>
+                <form method="POST" action="{{ route('auth.logout') }}">@csrf @method('DELETE')
+                    <button class="text-red-600 text-sm">Déconnexion</button>
+                </form>
+            </header>
             <main class="flex-1 p-6 overflow-auto">
                 @include('layouts.alerts')
                 @yield('content')
